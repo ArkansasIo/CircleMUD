@@ -18,6 +18,9 @@ typedef struct {
   double experience_reward;
   double loot_scale;
   int alive;
+  /* Non-zero when this instance is owned by an external world bridge. */
+  int source_key;
+  unsigned long bridge_epoch;
 } rpg_monster;
 
 int rpg_monster_init(rpg_monster *monster, int id, int catalog_index, int zone_id, int difficulty);
