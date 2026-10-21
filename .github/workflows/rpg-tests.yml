@@ -5,13 +5,24 @@ on:
     branches: [master, main]
   pull_request:
     branches: [master, main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: aetherworld-rpg-tests-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   rpg-tests:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - name: Build and run RPG and AetherWorld runtime tests
         run: |
           sh tests/run_rpg_tests.sh
           sh tests/run_rpg_catalog_runtime_test.sh
+      - name: Validate source contracts
+        run: sh tests/check_source_contract.sh
