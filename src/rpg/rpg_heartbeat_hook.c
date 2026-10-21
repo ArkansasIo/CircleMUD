@@ -1,6 +1,8 @@
 #include "rpg_runtime_tick.h"
 #include "rpg_circlemud_bridge.h"
 #include "rpg_circlemud_mob_bridge.h"
+#include "rpg_circlemud_host_adapter.h"
+#include "rpg_circlemud_host_native.h"
 
 /* Original CircleMUD declaration from handler.c. */
 void extract_pending_chars(void);
@@ -15,6 +17,8 @@ void circlemud_rpg_extract_pending_chars(void) {
 
   if (!initialized) {
     rpg_runtime_tick_init();
+    rpg_circlemud_host_adapter_init();
+    (void)rpg_circlemud_install_native_host_callbacks();
     initialized = 1;
   }
 
