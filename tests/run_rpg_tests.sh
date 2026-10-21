@@ -15,6 +15,14 @@ $CC $CFLAGS \
 rm -f /tmp/circlemud-rpg-tests
 
 $CC $CFLAGS \
+  tests/rpg_quest_runtime_test.c \
+  src/rpg/rpg_quest.c \
+  src/rpg/rpg_quest_runtime.c \
+  -o /tmp/circlemud-rpg-quest-tests
+/tmp/circlemud-rpg-quest-tests
+rm -f /tmp/circlemud-rpg-quest-tests
+
+$CC $CFLAGS \
   tests/aetherworld_runtime_test.c \
   src/aetherworld.c \
   src/aetherworld_story.c \
