@@ -1,0 +1,28 @@
+name: RPG 900 Catalog
+
+on:
+  push:
+    paths:
+      - 'data/rpg/catalog_900.json'
+      - 'scripts/tools/generate_catalog_900.py'
+      - 'scripts/tools/validate_catalog_900.py'
+      - '.github/workflows/catalog-900.yml'
+  pull_request:
+    paths:
+      - 'data/rpg/catalog_900.json'
+      - 'scripts/tools/generate_catalog_900.py'
+      - 'scripts/tools/validate_catalog_900.py'
+      - '.github/workflows/catalog-900.yml'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Validate catalog specification
+        run: python3 scripts/tools/validate_catalog_900.py
+      - name: Generate catalog
+        run: python3 scripts/tools/generate_catalog_900.py /tmp/catalog_900.generated.json
+      - name: Verify generated count
+        run: python3 -c "import json; d=json.load(open('/tmp/catalog_900.generated.json')); assert d['total_entries']==900; assert len(d['entries'])==900; print('900 entries verified')"
