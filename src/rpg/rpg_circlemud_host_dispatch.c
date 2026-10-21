@@ -6,29 +6,32 @@
 
 int rpg_circlemud_host_dispatch_queue(void) {
   int i;
-  int consumed = 0;
   int count = rpg_circlemud_combat_event_count();
+  int processed = 0;
 
-  if (count <= 0)
+  if (count <= 0 || !rpg_circlemud_host_adapter_available())
     return 0;
 
+  /* Events are FIFO and sequence-numbered. A successful prefix is committed;
+   * the first rejected/unapplied event remains queued for the next heartbeat. */
   for (i = 0; i < count; ++i) {
     rpg_circlemud_combat_event event;
 
     if (!rpg_circlemud_combat_event_get(i, &event))
-      continue;
+      break;
 
     if (rpg_circlemud_combat_transaction_validate(&event) !=
         RPG_CIRCLEMUD_TX_ACCEPTED)
-      continue;
+      break;
 
-    if (rpg_circlemud_host_adapter_apply(&event))
-      ++consumed;
+    if (!rpg_circlemud_host_adapter_apply(&event))
+      break;
+
+    ++processed;
   }
 
-  /* Preserve the queue if even one event could not cross the host boundary. */
-  if (consumed == count)
+  if (processed == count)
     rpg_circlemud_combat_bridge_clear();
 
-  return consumed;
+  return processed;
 }
