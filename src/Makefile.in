@@ -62,7 +62,7 @@ ref:
 	  $(CXREF) -D__CXREF__ -xref -Odoc -Ncircle $$file ; \
 	done
 	@for file in $(CXREF_FILES) ; do \
-	   echo Cross referencing $$file ; \
+	   echo Documenting $$file ; \
 	   ( cd . ; $(CXREF) -D__CXREF__ -warn-xref -xref -Odoc -Ncircle -html $$file ) ; \
 	   rm -f $(DOCS) ; \
 	done
