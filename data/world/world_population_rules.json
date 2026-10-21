@@ -1,0 +1,20 @@
+{
+  "mob_tiers": ["normal","elite","rare","champion","world_boss"],
+  "spawn_types": ["static","patrol","ambush","event","dynamic"],
+  "world_boss_rules": {
+    "min_level": 25,
+    "max_level": 720,
+    "spawn_window_minutes": 120,
+    "minimum_participation": 3,
+    "scaling": "participating_players_and_average_level",
+    "rewards": ["personal_loot","group_loot","achievement","title","reputation","world_event_credit"]
+  },
+  "npc_roles": ["quest_giver","vendor","trainer","crafting_master","guard","faction_agent","banker","innkeeper","stable_master","flight_master","lorekeeper","event_host","guild_master","healer","repairer"],
+  "respawn_rules": {
+    "normal_mob_seconds": 60,
+    "elite_mob_seconds": 300,
+    "rare_mob_seconds": 1800,
+    "champion_mob_seconds": 3600,
+    "world_boss_seconds": 86400
+  }
+}
