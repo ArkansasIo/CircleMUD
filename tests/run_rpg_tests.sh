@@ -1,4 +1,4 @@
-# Reproducible RPG runtime regression suite.
+#!/bin/sh
 set -eu
 CC=${CC:-cc}
 CFLAGS="-std=c99 -Wall -Wextra -pedantic -Isrc/rpg -Isrc"
@@ -105,7 +105,6 @@ $CC $CFLAGS \
   src/rpg/rpg_encounter.c \
   src/rpg/rpg_level.c \
   src/rpg/rpg_world_difficulty.c \
-  src/rpg/rpg_level.c \
   src/rpg/rpg_value.c \
   -lm -o /tmp/circlemud-rpg-heartbeat-hook-tests
 /tmp/circlemud-rpg-heartbeat-hook-tests
