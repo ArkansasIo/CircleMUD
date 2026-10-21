@@ -19,7 +19,7 @@
  * lifetime of a linked NPC, however, its object address is stable. We derive
  * a non-zero 31-bit source key from that address and never retain the pointer
  * in RPG state. This gives the host adapter an exact same-process identity and
- * avoids the old VNUM/room/ordinal identity changing when a mob moves.
+ * avoids an identity changing when a mob moves between rooms.
  */
 static int circlemud_mob_source_key(const struct char_data *mob) {
   uintptr_t value;
@@ -28,9 +28,8 @@ static int circlemud_mob_source_key(const struct char_data *mob) {
     return 0;
 
   value = (uintptr_t)(const void *)mob;
-  value ^= value >> 17;
-  value ^= value >> 31;
-  value ^= value >> 47;
+  value ^= value >> 16;
+  value ^= value >> 8;
   value &= (uintptr_t)0x7fffffffU;
   return value == 0 ? 1 : (int)value;
 }
