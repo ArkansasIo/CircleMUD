@@ -12,34 +12,27 @@
 #include "structs.h"
 #include "utils.h"
 
-/*
- * CircleMUD does not expose a stable persistent per-NPC instance identifier in
- * the legacy char_data ABI. The bridge therefore derives a reconciliation key
- * from the prototype RNUM/VNUM, room, and deterministic occurrence ordinal.
- * This prevents duplicate RPG instances during ordinary heartbeat passes while
- * avoiding retention of a char_data pointer. A future host integration can
- * replace the derived key with a true instance ID without changing RPG state.
- */
-static int circlemud_mob_source_key(const struct char_data *mob, int ordinal) {
-  long long key;
-  int room = -1;
-  int rnum;
-  int vnum;
+#include <stdint.h>
 
-  if (!mob || ordinal < 0)
+/*
+ * CircleMUD has no stable persistent NPC instance ID in char_data. For the
+ * lifetime of a linked NPC, however, its object address is stable. We derive
+ * a non-zero 31-bit source key from that address and never retain the pointer
+ * in RPG state. This gives the host adapter an exact same-process identity and
+ * avoids the old VNUM/room/ordinal identity changing when a mob moves.
+ */
+static int circlemud_mob_source_key(const struct char_data *mob) {
+  uintptr_t value;
+
+  if (!mob)
     return 0;
 
-  vnum = GET_MOB_VNUM(mob);
-  rnum = GET_MOB_RNUM(mob);
-  if (IN_ROOM(mob) != NOWHERE)
-    room = (int)IN_ROOM(mob);
-
-  key = ((long long)(rnum + 1) * 1000003LL) ^
-        ((long long)(vnum + 1) * 9176LL) ^
-        ((long long)(room + 2) * 131LL) ^
-        ((long long)(ordinal + 1) * 17LL);
-  key &= 0x7fffffffLL;
-  return key > 0 ? (int)key : 1;
+  value = (uintptr_t)(const void *)mob;
+  value ^= value >> 17;
+  value ^= value >> 31;
+  value ^= value >> 47;
+  value &= (uintptr_t)0x7fffffffU;
+  return value == 0 ? 1 : (int)value;
 }
 
 static int circlemud_mob_catalog_index(int vnum) {
@@ -85,14 +78,13 @@ int rpg_circlemud_sync_mob_prototype(struct char_data *mob) {
   if (IN_ROOM(mob) != NOWHERE && IN_ROOM(mob) >= 0 && IN_ROOM(mob) <= top_of_world)
     zone_id = world[IN_ROOM(mob)].zone;
 
-  return rpg_live_sync_monster_source(circlemud_mob_source_key(mob, 0),
+  return rpg_live_sync_monster_source(circlemud_mob_source_key(mob),
                                       catalog_index, zone_id, 1, level,
                                       health, health, damage, armor);
 }
 
 void rpg_circlemud_sync_mob_prototypes(void) {
   struct char_data *mob;
-  int ordinal = 0;
 
   rpg_live_begin_monster_sync();
 
@@ -127,9 +119,8 @@ void rpg_circlemud_sync_mob_prototypes(void) {
     if (IN_ROOM(mob) != NOWHERE && IN_ROOM(mob) >= 0 && IN_ROOM(mob) <= top_of_world)
       zone_id = world[IN_ROOM(mob)].zone;
 
-    ++ordinal;
     (void)rpg_live_sync_monster_source(
-        circlemud_mob_source_key(mob, ordinal), catalog_index, zone_id, 1,
+        circlemud_mob_source_key(mob), catalog_index, zone_id, 1,
         level, health, health, damage, armor);
   }
 
@@ -138,7 +129,6 @@ void rpg_circlemud_sync_mob_prototypes(void) {
 
 struct char_data *rpg_circlemud_find_mob_by_source_key(int source_key) {
   struct char_data *mob;
-  int ordinal = 0;
 
   if (source_key <= 0)
     return NULL;
@@ -147,8 +137,7 @@ struct char_data *rpg_circlemud_find_mob_by_source_key(int source_key) {
     if (!IS_NPC(mob) || !IS_MOB(mob))
       continue;
 
-    ++ordinal;
-    if (circlemud_mob_source_key(mob, ordinal) == source_key)
+    if (circlemud_mob_source_key(mob) == source_key)
       return mob;
   }
 
