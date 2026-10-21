@@ -26,6 +26,64 @@ paths:
       responses:
         '200':
           description: Health status
+  /world/map:
+    get:
+      summary: Get the authoritative world map snapshot
+      responses:
+        '200':
+          description: World map
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorldMap'
+  /world/locations/{id}:
+    get:
+      summary: Get one world location
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: string}
+      responses:
+        '200':
+          description: Location
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Location'
+        '404': {description: Location not found}
+  /player/state:
+    get:
+      summary: Get the current player state
+      responses:
+        '200':
+          description: Player state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlayerState'
+  /quests/active:
+    get:
+      summary: Get active quests for the current player
+      responses:
+        '200':
+          description: Active quests
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {$ref: '#/components/schemas/Quest'}
+  /events/active:
+    get:
+      summary: Get active world events
+      responses:
+        '200':
+          description: Active world events
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {$ref: '#/components/schemas/WorldEvent'}
 components:
   schemas:
     SystemInfo:
@@ -39,3 +97,71 @@ components:
         developer: {type: string}
         build_id: {type: string}
         api_version: {type: string}
+    Point:
+      type: object
+      required: [x,y]
+      properties:
+        x: {type: number}
+        y: {type: number}
+    Location:
+      type: object
+      required: [id,name,kind,region,position]
+      properties:
+        id: {type: string}
+        name: {type: string}
+        kind: {type: string}
+        region: {type: string}
+        position: {$ref: '#/components/schemas/Point'}
+    WorldMap:
+      type: object
+      required: [id,name,width,height,tile_size,regions,locations,player]
+      properties:
+        id: {type: string}
+        name: {type: string}
+        width: {type: integer}
+        height: {type: integer}
+        tile_size: {type: integer}
+        regions: {type: array, items: {type: object}}
+        locations: {type: array, items: {$ref: '#/components/schemas/Location'}}
+        roads: {type: array, items: {type: array}}
+        player: {$ref: '#/components/schemas/Point'}
+    PlayerState:
+      type: object
+      required: [id,name,level,hp,max_hp,mana,max_mana,xp,zone_id,position]
+      properties:
+        id: {type: string}
+        name: {type: string}
+        level: {type: integer}
+        hp: {type: integer}
+        max_hp: {type: integer}
+        mana: {type: integer}
+        max_mana: {type: integer}
+        xp: {type: integer}
+        zone_id: {type: integer}
+        position: {$ref: '#/components/schemas/Point'}
+    QuestObjective:
+      type: object
+      required: [id,label,current,required]
+      properties:
+        id: {type: string}
+        label: {type: string}
+        current: {type: integer}
+        required: {type: integer}
+    Quest:
+      type: object
+      required: [id,title,act,status,objectives]
+      properties:
+        id: {type: string}
+        title: {type: string}
+        act: {type: integer}
+        status: {type: string}
+        objectives: {type: array, items: {$ref: '#/components/schemas/QuestObjective'}}
+    WorldEvent:
+      type: object
+      required: [id,title,type,state]
+      properties:
+        id: {type: string}
+        title: {type: string}
+        type: {type: string}
+        state: {type: string}
+        zone_id: {type: integer}
