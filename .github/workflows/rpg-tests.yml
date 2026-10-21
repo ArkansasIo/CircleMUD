@@ -1,15 +1,15 @@
-name: RPG runtime tests
+name: AetherWorld RPG runtime tests
 
 on:
   push:
-    branches: [master]
+    branches: [master, main]
   pull_request:
-    branches: [master]
+    branches: [master, main]
 
 jobs:
   rpg-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Build and run RPG runtime tests
+      - name: Build and run RPG and AetherWorld runtime tests
         run: sh tests/run_rpg_tests.sh
