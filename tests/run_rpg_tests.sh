@@ -117,7 +117,6 @@ $CC $CFLAGS \
   src/rpg/rpg_system.c \
   src/rpg/rpg_world.c \
   src/rpg/rpg_character.c \
-  src/rpg/rpg_level.c \
   src/rpg/rpg_equipment.c \
   src/rpg/rpg_item.c \
   src/rpg/rpg_catalog.c \
@@ -143,7 +142,6 @@ $CC $CFLAGS \
   src/rpg/rpg_item.c \
   src/rpg/rpg_catalog.c \
   src/rpg/rpg_character_value.c \
-  src/rpg/rpg_level.c \
   src/rpg/rpg_value.c \
   src/rpg/rpg_monster.c \
   src/rpg/rpg_encounter.c \
