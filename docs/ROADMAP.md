@@ -1,53 +1,65 @@
-# CircleMUD Modernization Roadmap
+# AetherWorld Modernization Roadmap
 
 ## Mission
 
-Maintain the legacy CircleMUD codebase as a buildable, documented text-MUD foundation. Modernize incrementally without silently changing classic gameplay or removing upstream attribution.
+Maintain the legacy CircleMUD codebase as a buildable, documented text-MUD foundation while progressively adding AetherWorld RPG systems. Preserve upstream attribution and keep new gameplay isolated until it is tested.
 
 ## Phase 1 — Reproducible baseline
 
-- [x] Add a Linux GitHub Actions build workflow.
-- [x] Document the current source layout and basic build entry point.
-- [ ] Confirm the workflow against the real hosted runner and fix compiler or dependency failures.
+- [x] Linux GitHub Actions build workflow.
+- [x] Document source layout and basic build entry point.
+- [x] Compile the AetherWorld runtime modules through the main Makefile.
+- [x] Add isolated RPG/AetherWorld regression tests.
 - [ ] Record compiler warnings and distinguish known legacy warnings from regressions.
-- [ ] Add ignore rules for generated binaries, object files, logs, and local runtime data after checking existing repository conventions.
 
-## Phase 2 — Regression checks
+## Phase 2 — Campaign and progression
 
-- Add unit tests for isolated helpers where they can be tested without launching a full server.
-- Add smoke tests for configuration parsing and world-data loading.
-- Add a disposable test world and launch/stop integration test.
-- Add sanitizers (AddressSanitizer and UndefinedBehaviorSanitizer) as a separate, non-blocking job once the baseline build is stable.
-- Ensure tests never read or modify production player files.
+- [x] 12-act AetherWorld campaign registry.
+- [x] 50 linked quests and prerequisite chain.
+- [x] Level progression through level 720.
+- [x] Quest availability and registry validation.
+- [ ] Persist campaign progress in player save data through an explicit adapter.
+- [ ] Add branching quest state and optional side objectives.
+- [ ] Add quest rewards for equipment, abilities, faction reputation, and titles.
 
-## Phase 3 — Security and operations
+## Phase 3 — RPG systems
 
-- Audit input parsing, string formatting, file paths, authentication, and privilege boundaries.
-- Verify password storage and any legacy cryptographic dependency before public deployment.
-- Add documented server bind-address, firewall, backup, rotation, and least-privilege guidance.
-- Establish a supported compiler/platform matrix and a repeatable release process.
-- Do not expose administrative commands or data directories to untrusted users.
+- [x] Existing RPG level, RNG, loot, encounter, and world-difficulty helpers.
+- [ ] Character attribute and derived-stat layer.
+- [ ] Classes, subclasses, talents, and specialization trees.
+- [ ] Equipment slots, item affixes, rarity, set bonuses, and durability.
+- [ ] Crafting, gathering, recipes, professions, and economy.
+- [ ] Parties, guilds, faction reputation, and social progression.
 
-## Phase 4 — Developer experience
+## Phase 4 — World and endgame
 
-- Document module boundaries and lifecycle: communications, interpreter, database/world loading, movement, combat, spells, objects, persistence, and utilities.
-- Add architecture diagrams and command-registration guidance.
-- Document data formats and safe world-building workflows.
-- Track compatibility decisions in architecture decision records.
+- [ ] Data-driven zones, biomes, encounters, and dynamic events.
+- [ ] Dungeons, raids, trials, and tower progression.
+- [ ] World bosses and scalable encounter modifiers.
+- [ ] Seasonal and account-wide progression.
+- [ ] Post-campaign legacy/NG+ systems.
 
-## Phase 5 — Optional RPG/MMORPG extensions
+## Phase 5 — Developer experience
 
-Implement only after the baseline is tested and maintain classic behavior by default:
+- [ ] Architecture diagrams and module lifecycle documentation.
+- [ ] Data validation tools for world, quest, item, and encounter files.
+- [ ] Deterministic content validation in CI.
+- [ ] Structured logging and metrics.
+- [ ] Safe builder/OLC workflows for AetherWorld content.
 
-- Data-driven items, enemies, quests, zones, and encounter definitions.
-- Character progression, equipment, crafting, guilds, parties, and instance/raid concepts.
-- Structured logging, metrics, moderation/audit events, and administrative tooling.
-- A versioned external API or web status dashboard only if a clear operational need exists.
+## Phase 6 — API and UI
+
+- [ ] Versioned player, quest, world-map, and campaign APIs.
+- [ ] Character sheet UI.
+- [ ] Campaign and quest journal.
+- [ ] World map and zone browser.
+- [ ] Inventory/equipment/crafting interfaces.
+- [ ] Party, guild, and social panels.
 
 ## Compatibility and licensing
 
-This project is an unofficial mirror of CircleMUD. Retain original credits and license notices. Review the included license document and any third-party notices before distributing modifications, binaries, or hosted services.
+AetherWorld is the new project identity, while CircleMUD remains the upstream engine attribution and compatibility reference. Do not remove or rewrite upstream credits and license notices. Review the included license materials before distributing modifications, binaries, or hosted services.
 
 ## Definition of done
 
-A phase is complete only when its tests pass on the configured CI runner, the relevant behavior is documented, and any known limitations are recorded.
+A feature is complete only when its source compiles, its isolated behavior has regression coverage where practical, the relevant data is validated, and the documentation describes integration and compatibility boundaries.
