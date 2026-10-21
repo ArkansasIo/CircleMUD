@@ -1,81 +1,34 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="AetherWorld CircleMUD RPG engine dashboard and API documentation.">
-  <title>AetherWorld | CircleMUD RPG Engine</title>
-  <link rel="stylesheet" href="styles.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="AetherWorld — playable browser RPG edition of the CircleMUD project.">
+<title>AetherWorld — CircleMUD Browser RPG</title>
+<link rel="stylesheet" href="game.css">
 </head>
 <body>
-  <header class="topbar">
-    <div class="brand"><span class="brand-mark">◆</span><span>CircleMUD RPG Engine</span><small>v3.5.0</small></div>
-    <nav>
-      <button class="nav active" data-view="dashboard">Home</button>
-      <button class="nav" data-view="play">Play</button>
-      <button class="nav" data-view="world">World</button>
-      <button class="nav" data-view="rpg">RPG</button>
-      <button class="nav" data-view="api">API</button>
-      <button class="nav" data-view="docs">Docs</button>
-    </nav>
-    <div class="status"><i></i> GitHub Pages</div>
-  </header>
-
-  <main class="shell">
-    <aside class="sidebar">
-      <h3>AETHERWORLD</h3>
-      <button class="side active" data-view="dashboard">◈ Dashboard</button>
-      <button class="side" data-view="play">◉ Character</button>
-      <button class="side" data-view="play">▣ Inventory</button>
-      <button class="side" data-view="rpg">✦ Abilities</button>
-      <button class="side" data-view="play">⚑ Quests</button>
-      <button class="side" data-view="world">⌖ World Map</button>
-      <button class="side" data-view="world">♟ Zones</button>
-      <button class="side" data-view="rpg">⚔ Dungeons</button>
-      <button class="side" data-view="rpg">✚ Raids</button>
-      <button class="side" data-view="api">⌘ API Console</button>
-      <button class="side" data-view="docs">☷ Documentation</button>
-    </aside>
-
-    <section class="content">
-      <div id="dashboard" class="view active-view">
-        <div class="hero"><div><span class="eyebrow">AETHERWORLD CONTROL CENTER</span><h1>RPG Engine Dashboard</h1><p>CircleMUD compatibility foundation with the modern AetherWorld RPG runtime.</p></div><a class="button" href="https://github.com/ArkansasIo/CircleMUD">View Repository</a></div>
-        <div class="cards">
-          <article><span class="metric">720</span><span>Max RPG Level</span><small>Progression framework</small></article>
-          <article><span class="metric">12</span><span>Story Acts</span><small>Campaign registry</small></article>
-          <article><span class="metric">50</span><span>Quests</span><small>Prerequisite chains</small></article>
-          <article><span class="metric">6</span><span>Core API Areas</span><small>Player · Quest · World · RPG</small></article>
-        </div>
-        <div class="grid2">
-          <section class="panel"><h2>Runtime Architecture</h2><div class="flow"><b>CircleMUD</b><span>→</span><b>Bridge</b><span>→</span><b>RPG Runtime</b><span>→</span><b>Host Events</b></div><p>Native C server state remains authoritative while RPG state is synchronized through explicit bridge interfaces.</p></section>
-          <section class="panel"><h2>Build</h2><pre>./configure
-cd src
-make
-sh tests/run_rpg_tests.sh</pre><div class="badge">CI workflows configured</div></section>
-        </div>
-      </div>
-
-      <div id="play" class="view"><div class="hero compact"><div><span class="eyebrow">PLAYER UI</span><h1>Character Command Center</h1><p>Web presentation layer for the RPG character, inventory, quest and combat systems.</p></div></div><div class="grid3"><section class="panel"><h2>Character</h2><div class="stat"><b>Level 25</b><span>Warrior</span></div><div class="bar hp"><span style="width:84%"></span></div><p>HP 520 / 620</p><div class="bar mp"><span style="width:65%"></span></div><p>MP 320 / 490</p></section><section class="panel"><h2>Active Quests</h2><ul class="list"><li>The Lost Relic <small>Speak to the Archmage</small></li><li>Goblin Threat <small>Kill 10 Goblins</small></li><li>Ancient Ruins <small>Enter the dungeon</small></li></ul></section><section class="panel"><h2>Equipment</h2><div class="slots"><span>⚔</span><span>🛡</span><span>♜</span><span>✦</span><span>◆</span><span>◈</span></div></section></div></div>
-
-      <div id="world" class="view"><div class="hero compact"><div><span class="eyebrow">WORLD SERVICES</span><h1>World Map & Zones</h1><p>Browser UI surface for zones, dungeons, raids, NPCs and resources.</p></div></div><section class="panel map"><div class="map-art"><span>◆</span><span>♜</span><span>⚔</span><span>✦</span><span>◉</span><span>◆</span><span>♟</span></div><div class="legend"><b>World Layers</b><label><input type="checkbox" checked> Cities</label><label><input type="checkbox" checked> Dungeons</label><label><input type="checkbox" checked> Raids</label><label><input type="checkbox" checked> NPCs</label><label><input type="checkbox"> Resources</label></div></section></div>
-
-      <div id="rpg" class="view"><div class="hero compact"><div><span class="eyebrow">RPG SYSTEMS</span><h1>Runtime Systems</h1><p>Data-driven systems exposed for the future web client and admin tools.</p></div></div><div class="cards"><article><span class="metric">RPG</span><span>Live State</span><small>Player and monster synchronization</small></article><article><span class="metric">COMBAT</span><span>Event Bridge</span><small>Validated transaction pipeline</small></article><article><span class="metric">ITEMS</span><span>Catalog</span><small>Inventory and equipment mapping</small></article><article><span class="metric">WORLD</span><span>Zones</span><small>NPC and world synchronization</small></article></div></div>
-
-      <div id="api" class="view"><div class="hero compact"><div><span class="eyebrow">DEVELOPER INTERFACE</span><h1>API Console</h1><p>Static API explorer. Configure the future server endpoint in the client configuration.</p></div></div><section class="panel api-console"><div class="request"><select id="method"><option>GET</option><option>POST</option><option>PUT</option><option>DELETE</option></select><input id="endpoint" value="/api/v1/health"><button id="send">Send</button></div><div class="response"><div class="response-head">Response <span id="status">200 OK</span></div><pre id="responseBody">{
-  "service": "aetherworld",
-  "engine": "CircleMUD",
-  "status": "online",
-  "version": "3.5.0"
-}</pre></div></section></div>
-
-      <div id="docs" class="view"><div class="hero compact"><div><span class="eyebrow">DOCUMENTATION</span><h1>Developer Portal</h1><p>Source, roadmap, build instructions and RPG bridge documentation.</p></div></div><div class="grid2"><section class="panel"><h2>Repository</h2><a href="https://github.com/ArkansasIo/CircleMUD">ArkansasIo/CircleMUD</a><a href="https://github.com/ArkansasIo/CircleMUD/tree/master/docs">Documentation directory</a><a href="https://github.com/ArkansasIo/CircleMUD/blob/master/docs/ROADMAP.md">Modernization roadmap</a></section><section class="panel"><h2>Local Development</h2><pre>./configure
-cd src
-make
-
-sh tests/run_rpg_tests.sh</pre></section></div></div>
-    </section>
-  </main>
-  <footer>AetherWorld · CircleMUD RPG Engine · GitHub Pages frontend · The web UI does not expose server credentials or player data.</footer>
-  <script src="app.js"></script>
+<div id="boot" class="boot"><div class="boot-card"><div class="logo">AETHERWORLD</div><div class="sub">CIRCLEMUD BROWSER RPG</div><div class="boot-bar"><span id="boot-progress"></span></div><div id="boot-text">Loading world...</div></div></div>
+<div id="game" class="game hidden">
+<header class="topbar"><button class="brand" data-screen="home"><b>◆ AETHERWORLD</b><small>CircleMUD RPG</small></button><div class="topstats"><span id="top-level">Lv 1</span><span id="top-gold">0 Gold</span><span id="top-zone">Haven</span></div><button id="save-btn" class="small-btn">SAVE</button></header>
+<div class="layout">
+<aside class="sidebar"><button data-screen="home">⌂ Command</button><button data-screen="world">⌖ World</button><button data-screen="combat">⚔ Combat</button><button data-screen="character">♟ Character</button><button data-screen="inventory">▣ Inventory</button><button data-screen="quests">⚑ Quests</button><button data-screen="craft">⚒ Crafting</button><button data-screen="dungeons">◆ Dungeons</button><button data-screen="tower">▲ Tower</button><button data-screen="codex">☷ Codex</button><div class="sidebar-foot"><button id="reset-btn" class="danger">Reset Save</button><span>Offline browser mode</span></div></aside>
+<main class="main">
+<section id="home" class="screen active"><div class="hero"><div><span class="eyebrow">BROWSER EDITION</span><h1>Enter AetherWorld</h1><p>Explore zones, fight monsters, complete quests, craft gear and descend into procedural instances.</p></div><button class="primary" data-action="explore">Explore World</button></div><div class="grid four" id="home-cards"></div><div class="grid two"><article class="panel"><h2>Adventure Log</h2><div id="log" class="log"></div></article><article class="panel"><h2>Quick Actions</h2><div class="actions"><button data-action="explore">Explore</button><button data-action="heal">Rest at Inn</button><button data-screen="quests">Quest Board</button><button data-screen="dungeons">Instances</button></div></article></div></section>
+<section id="world" class="screen"><div class="section-head"><div><span class="eyebrow">WORLD</span><h1>World Map</h1></div><span class="pill">Difficulty 1–9</span></div><div id="world-map" class="world-map"></div><div class="grid three" id="zone-list"></div></section>
+<section id="combat" class="screen"><div class="section-head"><div><span class="eyebrow">COMBAT</span><h1>Encounter</h1></div><span class="pill">Turn Combat</span></div><div id="combat-panel" class="combat-panel"></div></section>
+<section id="character" class="screen"><div class="section-head"><div><span class="eyebrow">CHARACTER</span><h1 id="char-name">Adventurer</h1></div></div><div class="grid three" id="character-stats"></div><div class="panel"><h2>Abilities</h2><div id="abilities" class="ability-grid"></div></div></section>
+<section id="inventory" class="screen"><div class="section-head"><div><span class="eyebrow">INVENTORY</span><h1>Equipment & Items</h1></div><span id="inventory-count" class="pill"></span></div><div id="equipment" class="equipment"></div><div id="inventory-grid" class="item-grid"></div></section>
+<section id="quests" class="screen"><div class="section-head"><div><span class="eyebrow">QUESTS</span><h1>Quest Board</h1></div></div><div id="quest-list" class="quest-list"></div></section>
+<section id="craft" class="screen"><div class="section-head"><div><span class="eyebrow">CRAFTING</span><h1>Workshop</h1></div></div><div class="grid two"><div class="panel"><h2>Recipes</h2><div id="recipe-list" class="recipe-list"></div></div><div class="panel"><h2>Materials</h2><div id="materials"></div></div></div></section>
+<section id="dungeons" class="screen"><div class="section-head"><div><span class="eyebrow">INSTANCES</span><h1>Dungeons · Trials · Raids</h1></div></div><div class="grid three" id="instance-list"></div></section>
+<section id="tower" class="screen"><div class="section-head"><div><span class="eyebrow">ENDGAME</span><h1>Tower of Eternity</h1></div><span class="pill" id="tower-floor">Floor 1</span></div><div class="tower-hero"><div><div class="tower-mark">▲</div><h2>100 Floors</h2><p>Each floor scales in difficulty. Defeat the guardian to advance.</p></div><button class="primary" data-action="tower">Enter Tower</button></div><div id="tower-rewards" class="grid four"></div></section>
+<section id="codex" class="screen"><div class="section-head"><div><span class="eyebrow">CODEX</span><h1>World Registry</h1></div></div><div class="grid two"><article class="panel"><h2>Races</h2><ul class="clean"><li>Human — adaptable</li><li>Elf — arcane affinity</li><li>Dwarf — resilience</li><li>Orc — physical power</li></ul></article><article class="panel"><h2>Systems</h2><ul class="clean"><li>Level progression: 1–720</li><li>World difficulty: 1–9</li><li>Procedural dungeons, raids and tower floors</li><li>Equipment, loot, crafting and quests</li></ul></article></div></section>
+</main>
+<aside class="rightbar"><div class="panel player-card"><div class="avatar">♟</div><h2 id="side-name">Adventurer</h2><div id="side-class">Warrior · Human</div><div class="bar hp"><span id="hp-bar"></span></div><small id="hp-text">0 / 0 HP</small><div class="bar xp"><span id="xp-bar"></span></div><small id="xp-text">0 XP</small></div><div class="panel"><h3>Resources</h3><div class="resource"><span>Gold</span><b id="side-gold">0</b></div><div class="resource"><span>Potions</span><b id="side-potions">0</b></div><div class="resource"><span>Energy</span><b id="side-energy">0</b></div></div><div class="panel"><h3>Current Zone</h3><b id="side-zone">Haven</b><p id="side-zone-desc">A safe frontier town.</p></div></aside>
+</div>
+<footer class="footer"><span>◆ AetherWorld Browser RPG</span><span id="connection">LOCAL SAVE · GitHub Pages</span></footer>
+</div>
+<script src="game-core.js"></script><script src="game-hotfix.js"></script>
 </body>
 </html>
