@@ -10,6 +10,8 @@ void rpg_equipment_init(rpg_equipment *equipment) {
   equipment->critical = 0.0;
   equipment->haste = 0.0;
   equipment->movement = 1.0;
+  equipment->pve_rating = 0.0;
+  equipment->pvp_rating = 0.0;
 }
 
 int rpg_equipment_equip(rpg_equipment *equipment, rpg_equipment_slot slot, rpg_item *item) {
@@ -37,6 +39,9 @@ void rpg_equipment_recalculate(rpg_equipment *equipment) {
   equipment->critical = 0.0;
   equipment->haste = 0.0;
   equipment->movement = 1.0;
+  equipment->pve_rating = 0.0;
+  equipment->pvp_rating = 0.0;
+
   for (i = 0; i < RPG_EQUIPMENT_SLOTS; ++i) {
     rpg_item *item = equipment->slots[i];
     if (!item) continue;
@@ -47,5 +52,12 @@ void rpg_equipment_recalculate(rpg_equipment *equipment) {
     } else if (item->catalog.category == RPG_CATALOG_ARMOR) {
       equipment->armor += item->catalog.defense;
     }
+    equipment->pve_rating += rpg_item_rating(item, RPG_CONTEXT_PVE);
+    equipment->pvp_rating += rpg_item_rating(item, RPG_CONTEXT_PVP);
   }
+}
+
+double rpg_equipment_rating(const rpg_equipment *equipment, rpg_value_context context) {
+  if (!equipment) return 0.0;
+  return context == RPG_CONTEXT_PVP ? equipment->pvp_rating : equipment->pve_rating;
 }
