@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0",
+  "catalog_id": "circlemud-900-content",
+  "total_entries": 900,
+  "generation": {
+    "deterministic": true,
+    "generator": "scripts/tools/generate_catalog_900.py",
+    "level_range": [1, 720],
+    "rarity_range": [1, 9]
+  },
+  "distribution": {
+    "weapons": 150,
+    "armor": 150,
+    "items": 200,
+    "consumables": 150,
+    "materials": 100,
+    "monsters": 100,
+    "npcs": 50
+  },
+  "categories": {
+    "weapons": {
+      "slots": ["main_hand", "off_hand", "ranged"],
+      "types": ["sword", "axe", "mace", "dagger", "spear", "polearm", "bow", "crossbow", "staff", "wand", "tome", "shield", "greatblade", "warhammer", "glaive"],
+      "damage_types": ["physical", "arcane", "frost", "fire", "shadow", "nature"]
+    },
+    "armor": {
+      "slots": ["helm", "chest", "shoulders", "hands", "legs", "feet", "cloak", "bracers", "belt", "ring", "amulet", "trinket"],
+      "weights": ["cloth", "leather", "mail", "plate", "cosmetic"]
+    },
+    "items": {
+      "types": ["relic", "charm", "rune", "totem", "idol", "sigil", "lantern", "compass", "key", "banner", "map", "gem", "orb", "coin", "token"]
+    },
+    "consumables": {
+      "types": ["potion", "elixir", "tonic", "flask", "ration", "antidote", "scroll", "bomb", "meal", "brew"],
+      "effects": ["heal", "mana", "stamina", "antidote", "buff"]
+    },
+    "materials": {
+      "types": ["ore", "wood", "cloth", "leather", "crystal", "essence", "herb", "scale", "bone", "shard"],
+      "sources": ["mining", "logging", "tailoring", "skinning", "arcane"]
+    },
+    "monsters": {
+      "types": ["wolf", "spider", "bandit", "wraith", "golem", "drake", "troll", "cultist", "elemental", "beast", "demon", "construct", "serpent", "knight", "horror"],
+      "tiers": ["normal", "elite", "rare", "champion", "world_boss"]
+    },
+    "npcs": {
+      "roles": ["merchant", "trainer", "questgiver", "guard", "craftsman"],
+      "factions": ["Circlehold", "Greenfall", "Ashen Reach", "Crown Plains", "Drowned Archive"]
+    }
+  },
+  "naming": {
+    "prefixes": ["Iron", "Ashen", "Verdant", "Crown", "Drowned", "Arcane", "Void", "Celestial", "Eternal", "Runed", "Storm", "Frost", "Ember", "Shadow", "Radiant", "Thorn", "Obsidian", "Silver"],
+    "suffix_format": "{category}-{sequence:04d}"
+  }
+}
