@@ -17,7 +17,7 @@ static rpg_live_player *find_player(int player_id) {
 static rpg_monster *find_monster(int monster_id) {
   int i;
   for (i = 0; i < RPG_LIVE_MAX_MONSTERS; ++i)
-    if (state.monsters[i].alive && state.monsters[i].id == monster_id)
+    if (state.monsters[i].id == monster_id && state.monsters[i].catalog_index >= 0)
       return &state.monsters[i];
   return NULL;
 }
@@ -80,7 +80,7 @@ int rpg_live_spawn_monster(int catalog_index, int zone_id, int difficulty) {
   int i;
   if (!state.initialized) return 0;
   for (i = 0; i < RPG_LIVE_MAX_MONSTERS; ++i) {
-    if (state.monsters[i].alive) continue;
+    if (state.monsters[i].catalog_index >= 0 && state.monsters[i].alive) continue;
     if (!rpg_monster_init(&state.monsters[i], state.next_monster_id++, catalog_index,
                           zone_id, difficulty))
       return 0;
@@ -93,7 +93,7 @@ int rpg_live_attack(int player_id, int monster_id, rpg_damage_type type) {
   rpg_live_player *player = find_player(player_id);
   rpg_monster *monster = find_monster(monster_id);
   rpg_attack_result result;
-  if (!player || !monster || player->combat_cooldown > 0.0) return 0;
+  if (!player || !monster || !monster->alive || player->combat_cooldown > 0.0) return 0;
   if (!rpg_apply_attack(&player->character, monster, type, &rng, &result)) return 0;
   player->combat_cooldown = 1.0 / (player->character.stats.haste > 0.01
                                       ? player->character.stats.haste
@@ -101,7 +101,6 @@ int rpg_live_attack(int player_id, int monster_id, rpg_damage_type type) {
   if (!monster->alive) {
     player->kills++;
     rpg_character_gain_xp(&player->character, monster->experience_reward);
-    player->loot_events++;
   }
   return 1;
 }
