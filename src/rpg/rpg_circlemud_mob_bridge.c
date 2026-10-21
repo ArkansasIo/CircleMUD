@@ -10,7 +10,7 @@
 
 /*
  * CircleMUD does not expose a stable per-NPC instance identifier in the
- * legacy char_data ABI.  This adapter therefore represents NPC prototypes
+ * legacy char_data ABI. This adapter therefore represents NPC prototypes
  * by VNUM in the RPG world archetype layer rather than pretending that a
  * VNUM is a unique live instance.
  */
@@ -42,7 +42,6 @@ static rpg_mob_tier circlemud_mob_tier(const rpg_catalog_entry *entry) {
 int rpg_circlemud_sync_mob_prototype(struct char_data *mob) {
   int vnum;
   int catalog_index;
-  int room_id = -1;
   int zone_id = -1;
   int level;
   double health;
@@ -68,10 +67,8 @@ int rpg_circlemud_sync_mob_prototype(struct char_data *mob) {
   if (armor <= 0.0)
     armor = entry.defense;
 
-  if (IN_ROOM(mob) != NOWHERE && IN_ROOM(mob) >= 0 && IN_ROOM(mob) <= top_of_world) {
-    room_id = (int)IN_ROOM(mob);
+  if (IN_ROOM(mob) != NOWHERE && IN_ROOM(mob) >= 0 && IN_ROOM(mob) <= top_of_world)
     zone_id = world[IN_ROOM(mob)].zone;
-  }
 
   /* VNUM is the archetype key; this is deliberately not a live-instance ID. */
   if (rpg_world_find(vnum))
