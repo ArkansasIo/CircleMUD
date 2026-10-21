@@ -16,7 +16,7 @@ static int monster_matches(const rpg_circlemud_combat_event *event) {
 
   for (i = 0; i < RPG_LIVE_MAX_MONSTERS; ++i) {
     const rpg_monster *monster = &state->monsters[i];
-    if (!monster->active)
+    if (monster->catalog_index < 0)
       continue;
     if (monster->id != event->monster_id)
       continue;
