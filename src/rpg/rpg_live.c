@@ -1,5 +1,6 @@
 #include "rpg_live.h"
 #include "rpg_rng.h"
+#include "rpg_catalog.h"
 
 #include <string.h>
 
@@ -20,6 +21,14 @@ static rpg_monster *find_monster(int monster_id) {
     if (state.monsters[i].id == monster_id && state.monsters[i].catalog_index >= 0)
       return &state.monsters[i];
   return NULL;
+}
+
+static void reset_item_state(rpg_live_player *player) {
+  int i;
+  for (i = 0; i < RPG_LIVE_MAX_INVENTORY; ++i)
+    memset(&player->inventory[i], 0, sizeof(player->inventory[i]));
+  for (i = 0; i < RPG_EQUIPMENT_SLOTS; ++i)
+    player->equipment_item_index[i] = -1;
 }
 
 void rpg_live_init(void) {
@@ -59,6 +68,7 @@ int rpg_live_register_player(int player_id, int level) {
     state.players[i].player_id = player_id;
     state.players[i].room_id = -1;
     state.players[i].zone_id = -1;
+    reset_item_state(&state.players[i]);
     rpg_character_init(&state.players[i].character, player_id);
     if (!rpg_character_set_level(&state.players[i].character, level)) {
       state.players[i].active = 0;
@@ -98,6 +108,41 @@ int rpg_live_set_player_world_state(int player_id, int room_id, int zone_id,
   player->inventory_count = inventory_count;
   player->equipment_count = equipment_count;
   player->inventory_weight = inventory_weight;
+  return 1;
+}
+
+int rpg_live_set_player_item(rpg_live_player *player, int inventory_index,
+                             int catalog_index, int stack, double durability) {
+  if (!player || inventory_index < 0 || inventory_index >= RPG_LIVE_MAX_INVENTORY ||
+      !rpg_catalog_valid_index(catalog_index) || stack <= 0 || durability < 0.0)
+    return 0;
+
+  if (!rpg_item_init(&player->inventory[inventory_index], catalog_index,
+                     inventory_index + 1))
+    return 0;
+  player->inventory[inventory_index].stack = stack;
+  player->inventory[inventory_index].durability = durability;
+  if (inventory_index >= player->inventory_count)
+    player->inventory_count = inventory_index + 1;
+  return 1;
+}
+
+int rpg_live_set_player_equipment_slot(rpg_live_player *player,
+                                       int equipment_slot, int inventory_index) {
+  if (!player || equipment_slot < 0 || equipment_slot >= RPG_EQUIPMENT_SLOTS ||
+      inventory_index < 0 || inventory_index >= player->inventory_count ||
+      inventory_index >= RPG_LIVE_MAX_INVENTORY ||
+      player->inventory[inventory_index].catalog.index < 0)
+    return 0;
+
+  player->equipment_item_index[equipment_slot] = inventory_index;
+  player->equipment_count = 0;
+  {
+    int i;
+    for (i = 0; i < RPG_EQUIPMENT_SLOTS; ++i)
+      if (player->equipment_item_index[i] >= 0)
+        ++player->equipment_count;
+  }
   return 1;
 }
 
