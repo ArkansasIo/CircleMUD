@@ -1,0 +1,18 @@
+{
+  "weapon_categories": ["sword","axe","mace","dagger","spear","polearm","bow","crossbow","staff","wand","tome","shield","fist","great_weapon","ranged_weapon"],
+  "armor_categories": ["cloth","leather","mail","plate","shield","cosmetic"],
+  "weapon_slots": ["main_hand","off_hand","two_hand","ranged"],
+  "armor_slots": ["head","neck","shoulder","chest","back","wrists","hands","waist","legs","feet","finger_1","finger_2","trinket_1","trinket_2"],
+  "affixes": ["strength","dexterity","constitution","intelligence","wisdom","vitality","spirit","luck","willpower","charisma","attack_power","spell_power","armor","critical_strike","critical_damage","haste","accuracy","expertise","armor_penetration","spell_penetration","dodge","parry","block","avoidance","tenacity","versatility","mastery","leech","resource_efficiency","movement_speed"],
+  "quality_rules": {
+    "common": {"min_affixes":0,"max_affixes":1},
+    "uncommon": {"min_affixes":1,"max_affixes":2},
+    "rare": {"min_affixes":2,"max_affixes":3},
+    "epic": {"min_affixes":3,"max_affixes":4},
+    "legendary": {"min_affixes":4,"max_affixes":5},
+    "mythic": {"min_affixes":5,"max_affixes":6},
+    "ancient": {"min_affixes":6,"max_affixes":7},
+    "transcendent": {"min_affixes":7,"max_affixes":8},
+    "eternal": {"min_affixes":8,"max_affixes":10}
+  }
+}
