@@ -19,7 +19,7 @@ OBJFILES = act.comm.o act.informative.o act.item.o act.movement.o \
 	bsd-snprintf.o aetherworld.o aetherworld_story.o \
 	rpg/rpg_level.o rpg/rpg_world_difficulty.o rpg/rpg_encounter.o \
 	rpg/rpg_rng.o rpg/rpg_loot.o rpg/rpg_world.o rpg/rpg_system.o \
-	rpg/rpg_runtime_tick.o rpg/rpg_heartbeat_hook.o rpg/rpg_live.o \
+	rpg/rpg_runtime_tick.o rpg/rpg_heartbeat_hook.o rpg/rpg_circlemud_bridge.o rpg/rpg_live.o \
 	rpg/rpg_catalog.o rpg/rpg_item.o rpg/rpg_equipment.o \
 	rpg/rpg_character.o rpg/rpg_character_value.o rpg/rpg_monster.o rpg/rpg_combat.o \
 	rpg/rpg_npc.o rpg/rpg_crafting.o rpg/rpg_loot_drop.o \
@@ -88,7 +88,7 @@ act.movement.o: act.movement.c conf.h sysdep.h structs.h utils.h comm.h interpre
 	$(CC) -c $(CFLAGS) act.movement.c
 act.offensive.o: act.offensive.c conf.h sysdep.h structs.h utils.h comm.h interpreter.h handler.h db.h spells.h
 	$(CC) -c $(CFLAGS) act.offensive.c
-act.other.o: act.other.c conf.h sysdep.h structs.h utils.h comm.h interpreter.h handler.h db.h spells.h screen.h house.h constants.h
+act.other.o: act.other.c conf.h sysdep.h structs.h utils.h comm.h interpreter.h handler.h db.h spells.h house.h constants.h
 	$(CC) -c $(CFLAGS) act.other.c
 act.social.o: act.social.c conf.h sysdep.h structs.h utils.h comm.h interpreter.h handler.h db.h spells.h
 	$(CC) -c $(CFLAGS) act.social.c
