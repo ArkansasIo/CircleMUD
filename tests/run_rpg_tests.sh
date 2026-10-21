@@ -28,6 +28,7 @@ $CC $CFLAGS \
   src/rpg/rpg_item.c \
   src/rpg/rpg_catalog.c \
   src/rpg/rpg_level.c \
+  src/rpg/rpg_loot.c \
   src/rpg/rpg_value.c \
   -lm -o /tmp/circlemud-rpg-item-value-tests
 /tmp/circlemud-rpg-item-value-tests
@@ -38,6 +39,7 @@ $CC $CFLAGS \
   src/rpg/rpg_item.c \
   src/rpg/rpg_catalog.c \
   src/rpg/rpg_level.c \
+  src/rpg/rpg_loot.c \
   src/rpg/rpg_equipment.c \
   src/rpg/rpg_value.c \
   -lm -o /tmp/circlemud-rpg-equipment-value-tests
@@ -51,6 +53,7 @@ $CC $CFLAGS \
   src/rpg/rpg_equipment.c \
   src/rpg/rpg_item.c \
   src/rpg/rpg_catalog.c \
+  src/rpg/rpg_level.c \
   src/rpg/rpg_level.c \
   src/rpg/rpg_value.c \
   -lm -o /tmp/circlemud-rpg-character-value-tests
@@ -117,6 +120,7 @@ $CC $CFLAGS \
   src/rpg/rpg_system.c \
   src/rpg/rpg_world.c \
   src/rpg/rpg_character.c \
+  src/rpg/rpg_level.c \
   src/rpg/rpg_equipment.c \
   src/rpg/rpg_item.c \
   src/rpg/rpg_catalog.c \
