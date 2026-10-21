@@ -42,6 +42,19 @@ $CC $CFLAGS \
 rm -f /tmp/circlemud-rpg-equipment-value-tests
 
 $CC $CFLAGS \
+  tests/rpg_character_value_test.c \
+  src/rpg/rpg_character.c \
+  src/rpg/rpg_character_value.c \
+  src/rpg/rpg_equipment.c \
+  src/rpg/rpg_item.c \
+  src/rpg/rpg_catalog.c \
+  src/rpg/rpg_level.c \
+  src/rpg/rpg_value.c \
+  -lm -o /tmp/circlemud-rpg-character-value-tests
+/tmp/circlemud-rpg-character-value-tests
+rm -f /tmp/circlemud-rpg-character-value-tests
+
+$CC $CFLAGS \
   tests/aetherworld_runtime_test.c \
   src/aetherworld.c \
   src/aetherworld_story.c \
