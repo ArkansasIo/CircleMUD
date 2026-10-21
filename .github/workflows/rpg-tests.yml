@@ -1,0 +1,15 @@
+name: RPG runtime tests
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  rpg-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and run RPG runtime tests
+        run: sh tests/run_rpg_tests.sh
