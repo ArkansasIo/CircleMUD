@@ -1,4 +1,5 @@
 #include "rpg_combat.h"
+#include "rpg_value.h"
 
 static double type_multiplier(rpg_damage_type type, int subtype) {
   unsigned int seed = (unsigned int)(subtype * 1103515245u + 12345u);
@@ -16,17 +17,26 @@ rpg_attack_result rpg_calculate_attack(const rpg_character *attacker, const rpg_
   rpg_attack_result r;
   double mitigation;
   double variance;
+  double crit_chance;
+  double crit_damage;
+  double effective_power;
   r.raw_damage = 0.0;
   r.mitigated_damage = 0.0;
   r.critical_multiplier = 2.0;
   r.critical = 0;
-  if (!attacker || !target || !target->alive) return r;
+  if (!attacker || !target || !target->alive || !rng) return r;
+
+  crit_chance = rpg_value_diminishing_value(attacker->stats.crit * 100.0, 70.0, 35.0) / 100.0;
+  crit_damage = rpg_value_stat_value(RPG_CONTEXT_PVE, RPG_VALUE_CRIT_DAMAGE, 100.0) / 100.0;
+  effective_power = attacker->stats.attack_power + attacker->equipment.pve_rating * 0.05;
   variance = 0.90 + rpg_rng_unit(rng) * 0.20;
-  r.critical = rpg_rng_unit(rng) < attacker->stats.crit;
-  r.raw_damage = attacker->stats.attack_power * type_multiplier(type, target->catalog_index) * variance;
+  r.critical = rpg_rng_unit(rng) < crit_chance;
+  r.critical_multiplier = 1.0 + crit_damage;
+  r.raw_damage = effective_power * type_multiplier(type, target->catalog_index) * variance;
   if (r.critical) r.raw_damage *= r.critical_multiplier;
-  mitigation = 100.0 / (100.0 + target->armor);
+  mitigation = 1.0 - rpg_armor_mitigation(target->armor, attacker->level);
   r.mitigated_damage = r.raw_damage * mitigation;
+  if (r.mitigated_damage < 0.0) r.mitigated_damage = 0.0;
   return r;
 }
 
