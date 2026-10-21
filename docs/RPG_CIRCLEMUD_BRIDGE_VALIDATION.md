@@ -5,11 +5,12 @@ This checklist protects the boundary between the legacy CircleMUD server and the
 ## Current heartbeat sequence
 
 1. Initialize the RPG runtime once.
-2. Synchronize linked non-player characters out of scope and live PCs into the RPG adapter.
-3. Advance the RPG runtime by the fixed heartbeat delta.
-4. Run CircleMUD's original pending-character extraction.
+2. Synchronize live PCs into the RPG adapter.
+3. Copy CircleMUD room/zone and inventory/equipment summary state into the RPG player snapshot.
+4. Advance the RPG runtime by the fixed heartbeat delta.
+5. Run CircleMUD's original pending-character extraction.
 
-The adapter must never retain a pointer to `struct char_data`. It stores the stable player ID and copies values into RPG-owned structures.
+The adapter must never retain a pointer to `struct char_data` or `struct obj_data`. It stores the stable player ID and copies values into RPG-owned structures.
 
 ## Required invariants
 
@@ -17,9 +18,12 @@ The adapter must never retain a pointer to `struct char_data`. It stores the sta
 - A player identifier less than zero is rejected.
 - Repeated synchronization of the same player does not allocate duplicate slots.
 - If a player disappears from `character_list`, its RPG registration is removed on the next bridge synchronization.
+- Explicit extraction/logout paths can call `rpg_circlemud_on_character_extracted()`; the heartbeat sweep remains a defensive cleanup fallback.
 - A full player pool causes registration to fail safely; it must not overwrite an active player's state.
+- Room and zone IDs are copied as a snapshot; `NOWHERE` is represented as `-1`.
+- Inventory count, equipped-object count, and carried weight are snapshots only. RPG code does not retain legacy object pointers or take ownership of CircleMUD objects.
 - The legacy player-file structures remain unchanged. In particular, do not alter the layout of `char_file_u` or `player_special_data_saved` without an explicit compatibility migration.
-- Synchronization copies the current legacy sheet; RPG simulation does not write combat results back into CircleMUD state until a controlled gameplay adapter and regression tests are added.
+- Synchronization copies the current legacy sheet; RPG simulation does not write combat results back into CircleMUD state until a controlled gameplay adapter and persistence regression tests are added.
 
 ## Regression test commands
 
@@ -30,6 +34,8 @@ sh tests/run_rpg_tests.sh
 sh tests/run_rpg_catalog_runtime_test.sh
 ```
 
+The RPG suite now includes `tests/rpg_live_bridge_state_test.c`, covering idempotent player registration, world-state snapshots, validation of negative counts, and explicit unregister cleanup.
+
 Run the legacy server build in a configured POSIX environment:
 
 ```sh
@@ -39,6 +45,6 @@ make -C src
 
 ## Integration boundary still to implement
 
-Logout/extraction should call `rpg_circlemud_unsync_character()` as part of the player lifecycle. The heartbeat sweep is a defensive cleanup fallback, not a replacement for explicit lifecycle wiring.
+The next bridge stage is object-level item translation. The current adapter intentionally stops at safe inventory/equipment summaries because `rpg_item` instances are RPG-owned and CircleMUD `obj_data` instances have their own lifecycle and persistence rules. A future adapter should use stable object identifiers/catalog mapping and explicit ownership rules before placing RPG item pointers into a character inventory.
 
-Inventory, equipped objects, room/zone state, and NPC instances must be adapted in isolated functions. Avoid changing legacy save-file layouts or applying RPG combat, loot, or XP directly to a player until persistence and multiplayer consistency have dedicated tests.
+NPC instances and RPG monster instances should likewise be synchronized through an isolated mapping layer rather than storing CircleMUD mob pointers.
