@@ -45,6 +45,10 @@ $CC $CFLAGS tests/rpg_live_test.c $LIVE_SOURCES -lm -o /tmp/circlemud-rpg-live-t
 /tmp/circlemud-rpg-live-tests
 rm -f /tmp/circlemud-rpg-live-tests
 
+$CC $CFLAGS tests/rpg_live_bridge_state_test.c $LIVE_SOURCES -lm -o /tmp/circlemud-rpg-live-bridge-state-tests
+/tmp/circlemud-rpg-live-bridge-state-tests
+rm -f /tmp/circlemud-rpg-live-bridge-state-tests
+
 $CC $CFLAGS tests/aetherworld_runtime_test.c src/aetherworld.c src/aetherworld_story.c -o /tmp/aetherworld-tests
 /tmp/aetherworld-tests
 rm -f /tmp/aetherworld-tests
