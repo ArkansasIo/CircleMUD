@@ -3,6 +3,7 @@
 #include "rpg_circlemud_mob_bridge.h"
 #include "rpg_circlemud_host_adapter.h"
 #include "rpg_circlemud_host_native.h"
+#include "rpg_circlemud_host_dispatch.h"
 
 /* Original CircleMUD declaration from handler.c. */
 void extract_pending_chars(void);
@@ -26,6 +27,9 @@ void circlemud_rpg_extract_pending_chars(void) {
   rpg_circlemud_sync_players();
   rpg_circlemud_sync_mob_prototypes();
 
+  /* Advance RPG simulation before applying its queued host mutations. */
   rpg_runtime_tick(0.1);
+  (void)rpg_circlemud_host_dispatch_queue();
+
   extract_pending_chars();
 }
