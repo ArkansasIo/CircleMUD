@@ -37,15 +37,15 @@ rpg_encounter_scaling rpg_encounter_scale(int level, rpg_mob_tier tier, int worl
   return s;
 }
 
-double rpg_encounter_power_budget(double player_effective_power_sum,
-                                  int participants,
-                                  int world_difficulty) {
+double rpg_encounter_budget_for_party(double player_effective_power_sum,
+                                      int participants,
+                                      int world_difficulty) {
   const rpg_world_difficulty *difficulty = rpg_world_difficulty_get(world_difficulty);
   double party_multiplier = rpg_party_multiplier(participants);
   double difficulty_factor = difficulty->mechanics;
   if (player_effective_power_sum < 0.0) player_effective_power_sum = 0.0;
-  return rpg_encounter_power_budget_value(player_effective_power_sum * party_multiplier,
-                                          difficulty_factor);
+  return rpg_encounter_power_budget(player_effective_power_sum * party_multiplier,
+                                    difficulty_factor);
 }
 
 double rpg_encounter_boss_health(double base_hp, double level_diff,
