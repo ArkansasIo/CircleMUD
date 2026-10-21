@@ -73,6 +73,10 @@ $CC $CFLAGS tests/rpg_circlemud_combat_consumer_test.c src/rpg/rpg_circlemud_com
 /tmp/circlemud-rpg-circlemud-combat-consumer-tests
 rm -f /tmp/circlemud-rpg-circlemud-combat-consumer-tests
 
+$CC $CFLAGS tests/rpg_circlemud_host_dispatch_test.c src/rpg/rpg_circlemud_combat_bridge.c src/rpg/rpg_circlemud_combat_transaction.c src/rpg/rpg_circlemud_host_adapter.c src/rpg/rpg_circlemud_host_dispatch.c $LIVE_SOURCES -lm -o /tmp/circlemud-rpg-circlemud-host-dispatch-tests
+/tmp/circlemud-rpg-circlemud-host-dispatch-tests
+rm -f /tmp/circlemud-rpg-circlemud-host-dispatch-tests
+
 $CC $CFLAGS tests/aetherworld_runtime_test.c src/aetherworld.c src/aetherworld_story.c -o /tmp/aetherworld-tests
 /tmp/aetherworld-tests
 rm -f /tmp/aetherworld-tests
