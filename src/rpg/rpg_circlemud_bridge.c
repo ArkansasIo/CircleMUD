@@ -13,6 +13,17 @@ static int circlemud_player_id(const struct char_data *ch) {
   return (int)ch->char_specials.saved.idnum;
 }
 
+static int circlemud_player_present(int id) {
+  struct char_data *ch;
+
+  for (ch = character_list; ch; ch = ch->next) {
+    if (!IS_NPC(ch) && circlemud_player_id(ch) == id)
+      return 1;
+  }
+
+  return 0;
+}
+
 int rpg_circlemud_sync_character(struct char_data *ch) {
   int id;
   rpg_character *rpg;
@@ -39,6 +50,7 @@ int rpg_circlemud_sync_character(struct char_data *ch) {
     rpg_character_set_level(rpg, ch->player.level);
 
   rpg->xp = (double)ch->points.exp;
+  rpg->class_id = ch->player.chclass;
   rpg->stats.str = ch->aff_abils.str;
   rpg->stats.dex = ch->aff_abils.dex;
   rpg->stats.con = ch->aff_abils.con;
@@ -72,7 +84,18 @@ int rpg_circlemud_unsync_character(struct char_data *ch) {
 
 void rpg_circlemud_sync_players(void) {
   struct char_data *ch;
+  const rpg_live_state *state;
+  int i;
 
   for (ch = character_list; ch; ch = ch->next)
     rpg_circlemud_sync_character(ch);
+
+  /* Remove RPG registrations for PCs that have left character_list. */
+  state = rpg_live_get_state();
+  for (i = 0; state && i < RPG_LIVE_MAX_PLAYERS; ++i) {
+    if (state->players[i].active &&
+        !circlemud_player_present(state->players[i].player_id)) {
+      rpg_live_unregister_player(state->players[i].player_id);
+    }
+  }
 }
