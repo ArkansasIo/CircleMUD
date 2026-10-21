@@ -6,8 +6,8 @@
 #include "rpg_live.h"
 #include "rpg_circlemud_item_bridge.h"
 
-#include "db.h"
 #include "structs.h"
+#include "db.h"
 #include "utils.h"
 
 static int circlemud_player_id(const struct char_data *ch) {
