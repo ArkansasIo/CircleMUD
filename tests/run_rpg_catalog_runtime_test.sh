@@ -13,7 +13,7 @@ $CC $CFLAGS \
   src/rpg/rpg_item.c src/rpg/rpg_equipment.c \
   src/rpg/rpg_character.c src/rpg/rpg_world_difficulty.c \
   src/rpg/rpg_encounter.c src/rpg/rpg_monster.c src/rpg/rpg_combat.c \
-  src/rpg/rpg_crafting.c "$RNG_OBJ" \
+  src/rpg/rpg_crafting.c src/rpg/rpg_value.c "$RNG_OBJ" \
   -lm -o "$OUT"
 
 "$OUT"
