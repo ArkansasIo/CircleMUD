@@ -1,5 +1,8 @@
 #include "rpg_circlemud_host_resolver.h"
 
+#include "conf.h"
+#include "sysdep.h"
+
 #include "rpg_circlemud_mob_bridge.h"
 
 #include "db.h"
