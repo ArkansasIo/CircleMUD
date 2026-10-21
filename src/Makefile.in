@@ -71,4 +71,4 @@ ref:
 	done
 
 rpg/%.o: rpg/%.c
-	$(CC) -c $(CFLAGS) -I./rpg $< -o $@
+	$(CC) -c $(CFLAGS) -I. -I./rpg $< -o $@
