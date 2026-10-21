@@ -10,6 +10,7 @@ $CC $CFLAGS \
   src/rpg/rpg_rng.c \
   src/rpg/rpg_loot.c \
   src/rpg/rpg_encounter.c \
+  src/rpg/rpg_value.c \
   -lm -o /tmp/circlemud-rpg-tests
 /tmp/circlemud-rpg-tests
 rm -f /tmp/circlemud-rpg-tests
@@ -71,6 +72,16 @@ $CC $CFLAGS \
   -lm -o /tmp/circlemud-rpg-combat-value-tests
 /tmp/circlemud-rpg-combat-value-tests
 rm -f /tmp/circlemud-rpg-combat-value-tests
+
+$CC $CFLAGS \
+  tests/rpg_encounter_budget_test.c \
+  src/rpg/rpg_encounter.c \
+  src/rpg/rpg_level.c \
+  src/rpg/rpg_world_difficulty.c \
+  src/rpg/rpg_value.c \
+  -lm -o /tmp/circlemud-rpg-encounter-budget-tests
+/tmp/circlemud-rpg-encounter-budget-tests
+rm -f /tmp/circlemud-rpg-encounter-budget-tests
 
 $CC $CFLAGS \
   tests/aetherworld_runtime_test.c \
