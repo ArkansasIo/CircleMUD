@@ -2,6 +2,7 @@
 #define CIRCLEMUD_RPG_EQUIPMENT_H
 
 #include "rpg_item.h"
+#include "rpg_value.h"
 
 #define RPG_EQUIPMENT_SLOTS 12
 
@@ -19,11 +20,14 @@ typedef struct {
   double critical;
   double haste;
   double movement;
+  double pve_rating;
+  double pvp_rating;
 } rpg_equipment;
 
 void rpg_equipment_init(rpg_equipment *equipment);
 int rpg_equipment_equip(rpg_equipment *equipment, rpg_equipment_slot slot, rpg_item *item);
 rpg_item *rpg_equipment_unequip(rpg_equipment *equipment, rpg_equipment_slot slot);
 void rpg_equipment_recalculate(rpg_equipment *equipment);
+double rpg_equipment_rating(const rpg_equipment *equipment, rpg_value_context context);
 
 #endif
