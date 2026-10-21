@@ -1,6 +1,5 @@
 #include "rpg_live.h"
 #include "rpg_rng.h"
-#include "rpg_system.h"
 
 #include <string.h>
 
@@ -27,7 +26,7 @@ void rpg_live_init(void) {
   memset(&state, 0, sizeof(state));
   state.initialized = 1;
   state.next_monster_id = 1;
-  rpg_rng_seed(&rng, 0xC1RC1E57u);
+  rpg_rng_seed(&rng, 0xC1A1E57u);
 }
 
 void rpg_live_update(double delta_seconds) {
@@ -101,8 +100,7 @@ int rpg_live_attack(int player_id, int monster_id, rpg_damage_type type) {
                                       : 1.0);
   if (!monster->alive) {
     player->kills++;
-    player->character.xp += monster->experience_reward;
-    rpg_character_gain_xp(&player->character, 0.0);
+    rpg_character_gain_xp(&player->character, monster->experience_reward);
     player->loot_events++;
   }
   return 1;
