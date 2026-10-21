@@ -23,10 +23,11 @@ static aw_instance_request request(void) {
 int main(void) {
   aw_instance_manager manager;
   aw_managed_instance *slot;
+  aw_instance_request req = request();
   uint64_t id;
   aw_instance_manager_init(&manager);
   assert(aw_instance_manager_active_count(&manager) == 0);
-  assert(aw_instance_manager_create(&manager, &request(), 2, &id) == AW_MANAGER_OK);
+  assert(aw_instance_manager_create(&manager, &req, 2, &id) == AW_MANAGER_OK);
   assert(aw_instance_manager_active_count(&manager) == 1);
   assert(aw_instance_manager_find(&manager, id, &slot) == AW_MANAGER_OK);
   assert(slot->instance.state == AW_INSTANCE_VALIDATED);
