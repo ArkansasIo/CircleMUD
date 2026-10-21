@@ -1,0 +1,41 @@
+openapi: 3.0.3
+info:
+  title: CircleMUD Application API
+  version: 0.1.0
+  description: Pre-alpha API boundary for the CircleMUD Game Engine.
+  x-developer: ArkansasIo
+  x-project-id: ARK-CIRCLE-GE
+  x-release-channel: pre-alpha
+  x-build-id: ARK-CIRCLE-GE-0.1.0-PA-0001
+servers:
+  - url: http://localhost:4000/api/v1
+paths:
+  /system:
+    get:
+      summary: Get engine identity and build information
+      responses:
+        '200':
+          description: Engine metadata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SystemInfo'
+  /health:
+    get:
+      summary: Get service health
+      responses:
+        '200':
+          description: Health status
+components:
+  schemas:
+    SystemInfo:
+      type: object
+      required: [name,id,version,channel,developer,build_id,api_version]
+      properties:
+        name: {type: string}
+        id: {type: string}
+        version: {type: string}
+        channel: {type: string}
+        developer: {type: string}
+        build_id: {type: string}
+        api_version: {type: string}
