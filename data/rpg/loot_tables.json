@@ -1,0 +1,19 @@
+{
+  "tables": {
+    "world_mob": {"common":0.70,"uncommon":0.22,"rare":0.065,"epic":0.014,"legendary":0.001},
+    "elite_mob": {"common":0.40,"uncommon":0.32,"rare":0.18,"epic":0.075,"legendary":0.024,"mythic":0.001},
+    "world_boss": {"rare":0.30,"epic":0.35,"legendary":0.25,"mythic":0.09,"ancient":0.01},
+    "dungeon_boss": {"rare":0.25,"epic":0.40,"legendary":0.27,"mythic":0.075,"ancient":0.005},
+    "raid_boss": {"epic":0.25,"legendary":0.42,"mythic":0.25,"ancient":0.075,"transcendent":0.005},
+    "nightmare_boss": {"legendary":0.30,"mythic":0.42,"ancient":0.22,"transcendent":0.055,"eternal":0.005},
+    "ultimate_nightmare": {"mythic":0.25,"ancient":0.40,"transcendent":0.30,"eternal":0.05},
+    "tower_crown": {"mythic":0.15,"ancient":0.35,"transcendent":0.40,"eternal":0.10}
+  },
+  "smart_loot": {
+    "enabled": true,
+    "role_weight": 0.35,
+    "class_weight": 0.35,
+    "spec_weight": 0.30
+  },
+  "loot_rules": ["gear","weapons","armor","crafting_materials","currency","consumables","cosmetics","mounts","titles","recipes","quest_items"]
+}
