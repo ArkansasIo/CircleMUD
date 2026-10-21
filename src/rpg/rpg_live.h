@@ -17,6 +17,11 @@ typedef struct {
   double combat_cooldown;
   unsigned long long kills;
   unsigned long long loot_events;
+  int room_id;
+  int zone_id;
+  int inventory_count;
+  int equipment_count;
+  int inventory_weight;
 } rpg_live_player;
 
 typedef struct {
@@ -34,6 +39,12 @@ const rpg_live_state *rpg_live_get_state(void);
 int rpg_live_register_player(int player_id, int level);
 int rpg_live_unregister_player(int player_id);
 rpg_character *rpg_live_get_character(int player_id);
+rpg_live_player *rpg_live_get_player(int player_id);
+
+/* Update CircleMUD-owned world/inventory snapshot data without taking ownership. */
+int rpg_live_set_player_world_state(int player_id, int room_id, int zone_id,
+                                    int inventory_count, int equipment_count,
+                                    int inventory_weight);
 
 int rpg_live_spawn_monster(int catalog_index, int zone_id, int difficulty);
 int rpg_live_attack(int player_id, int monster_id, rpg_damage_type type);
