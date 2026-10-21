@@ -8,5 +8,6 @@
  */
 void rpg_runtime_tick_init(void);
 void rpg_runtime_tick(double delta_seconds);
+double rpg_runtime_tick_elapsed_seconds(void);
 
 #endif
