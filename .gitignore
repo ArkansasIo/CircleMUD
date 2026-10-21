@@ -1,0 +1,29 @@
+# Build outputs
+/bin/
+/src/*.o
+/src/util/*.o
+/src/util/*~
+
+# Generated build/configuration files
+config.status
+config.cache
+config.log
+src/Makefile
+
+# Runtime output
+*.log
+*.pid
+core
+core.*
+
+# Local/editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Local player/runtime data should never be committed accidentally
+players/*.tmp
+lib/*.tmp
