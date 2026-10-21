@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="AetherWorld CircleMUD RPG engine dashboard and API documentation.">
+  <title>AetherWorld | CircleMUD RPG Engine</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">◆</span><span>CircleMUD RPG Engine</span><small>v3.5.0</small></div>
+    <nav>
+      <button class="nav active" data-view="dashboard">Home</button>
+      <button class="nav" data-view="play">Play</button>
+      <button class="nav" data-view="world">World</button>
+      <button class="nav" data-view="rpg">RPG</button>
+      <button class="nav" data-view="api">API</button>
+      <button class="nav" data-view="docs">Docs</button>
+    </nav>
+    <div class="status"><i></i> GitHub Pages</div>
+  </header>
+
+  <main class="shell">
+    <aside class="sidebar">
+      <h3>AETHERWORLD</h3>
+      <button class="side active" data-view="dashboard">◈ Dashboard</button>
+      <button class="side" data-view="play">◉ Character</button>
+      <button class="side" data-view="play">▣ Inventory</button>
+      <button class="side" data-view="rpg">✦ Abilities</button>
+      <button class="side" data-view="play">⚑ Quests</button>
+      <button class="side" data-view="world">⌖ World Map</button>
+      <button class="side" data-view="world">♟ Zones</button>
+      <button class="side" data-view="rpg">⚔ Dungeons</button>
+      <button class="side" data-view="rpg">✚ Raids</button>
+      <button class="side" data-view="api">⌘ API Console</button>
+      <button class="side" data-view="docs">☷ Documentation</button>
+    </aside>
+
+    <section class="content">
+      <div id="dashboard" class="view active-view">
+        <div class="hero"><div><span class="eyebrow">AETHERWORLD CONTROL CENTER</span><h1>RPG Engine Dashboard</h1><p>CircleMUD compatibility foundation with the modern AetherWorld RPG runtime.</p></div><a class="button" href="https://github.com/ArkansasIo/CircleMUD">View Repository</a></div>
+        <div class="cards">
+          <article><span class="metric">720</span><span>Max RPG Level</span><small>Progression framework</small></article>
+          <article><span class="metric">12</span><span>Story Acts</span><small>Campaign registry</small></article>
+          <article><span class="metric">50</span><span>Quests</span><small>Prerequisite chains</small></article>
+          <article><span class="metric">6</span><span>Core API Areas</span><small>Player · Quest · World · RPG</small></article>
+        </div>
+        <div class="grid2">
+          <section class="panel"><h2>Runtime Architecture</h2><div class="flow"><b>CircleMUD</b><span>→</span><b>Bridge</b><span>→</span><b>RPG Runtime</b><span>→</span><b>Host Events</b></div><p>Native C server state remains authoritative while RPG state is synchronized through explicit bridge interfaces.</p></section>
+          <section class="panel"><h2>Build</h2><pre>./configure
+cd src
+make
+sh tests/run_rpg_tests.sh</pre><div class="badge">CI workflows configured</div></section>
+        </div>
+      </div>
+
+      <div id="play" class="view"><div class="hero compact"><div><span class="eyebrow">PLAYER UI</span><h1>Character Command Center</h1><p>Web presentation layer for the RPG character, inventory, quest and combat systems.</p></div></div><div class="grid3"><section class="panel"><h2>Character</h2><div class="stat"><b>Level 25</b><span>Warrior</span></div><div class="bar hp"><span style="width:84%"></span></div><p>HP 520 / 620</p><div class="bar mp"><span style="width:65%"></span></div><p>MP 320 / 490</p></section><section class="panel"><h2>Active Quests</h2><ul class="list"><li>The Lost Relic <small>Speak to the Archmage</small></li><li>Goblin Threat <small>Kill 10 Goblins</small></li><li>Ancient Ruins <small>Enter the dungeon</small></li></ul></section><section class="panel"><h2>Equipment</h2><div class="slots"><span>⚔</span><span>🛡</span><span>♜</span><span>✦</span><span>◆</span><span>◈</span></div></section></div></div>
+
+      <div id="world" class="view"><div class="hero compact"><div><span class="eyebrow">WORLD SERVICES</span><h1>World Map & Zones</h1><p>Browser UI surface for zones, dungeons, raids, NPCs and resources.</p></div></div><section class="panel map"><div class="map-art"><span>◆</span><span>♜</span><span>⚔</span><span>✦</span><span>◉</span><span>◆</span><span>♟</span></div><div class="legend"><b>World Layers</b><label><input type="checkbox" checked> Cities</label><label><input type="checkbox" checked> Dungeons</label><label><input type="checkbox" checked> Raids</label><label><input type="checkbox" checked> NPCs</label><label><input type="checkbox"> Resources</label></div></section></div>
+
+      <div id="rpg" class="view"><div class="hero compact"><div><span class="eyebrow">RPG SYSTEMS</span><h1>Runtime Systems</h1><p>Data-driven systems exposed for the future web client and admin tools.</p></div></div><div class="cards"><article><span class="metric">RPG</span><span>Live State</span><small>Player and monster synchronization</small></article><article><span class="metric">COMBAT</span><span>Event Bridge</span><small>Validated transaction pipeline</small></article><article><span class="metric">ITEMS</span><span>Catalog</span><small>Inventory and equipment mapping</small></article><article><span class="metric">WORLD</span><span>Zones</span><small>NPC and world synchronization</small></article></div></div>
+
+      <div id="api" class="view"><div class="hero compact"><div><span class="eyebrow">DEVELOPER INTERFACE</span><h1>API Console</h1><p>Static API explorer. Configure the future server endpoint in the client configuration.</p></div></div><section class="panel api-console"><div class="request"><select id="method"><option>GET</option><option>POST</option><option>PUT</option><option>DELETE</option></select><input id="endpoint" value="/api/v1/health"><button id="send">Send</button></div><div class="response"><div class="response-head">Response <span id="status">200 OK</span></div><pre id="responseBody">{
+  "service": "aetherworld",
+  "engine": "CircleMUD",
+  "status": "online",
+  "version": "3.5.0"
+}</pre></div></section></div>
+
+      <div id="docs" class="view"><div class="hero compact"><div><span class="eyebrow">DOCUMENTATION</span><h1>Developer Portal</h1><p>Source, roadmap, build instructions and RPG bridge documentation.</p></div></div><div class="grid2"><section class="panel"><h2>Repository</h2><a href="https://github.com/ArkansasIo/CircleMUD">ArkansasIo/CircleMUD</a><a href="https://github.com/ArkansasIo/CircleMUD/tree/master/docs">Documentation directory</a><a href="https://github.com/ArkansasIo/CircleMUD/blob/master/docs/ROADMAP.md">Modernization roadmap</a></section><section class="panel"><h2>Local Development</h2><pre>./configure
+cd src
+make
+
+sh tests/run_rpg_tests.sh</pre></section></div></div>
+    </section>
+  </main>
+  <footer>AetherWorld · CircleMUD RPG Engine · GitHub Pages frontend · The web UI does not expose server credentials or player data.</footer>
+  <script src="app.js"></script>
+</body>
+</html>
