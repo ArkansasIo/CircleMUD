@@ -23,6 +23,15 @@ $CC $CFLAGS \
 rm -f /tmp/circlemud-rpg-quest-tests
 
 $CC $CFLAGS \
+  tests/rpg_item_value_test.c \
+  src/rpg/rpg_item.c \
+  src/rpg/rpg_catalog.c \
+  src/rpg/rpg_value.c \
+  -lm -o /tmp/circlemud-rpg-item-value-tests
+/tmp/circlemud-rpg-item-value-tests
+rm -f /tmp/circlemud-rpg-item-value-tests
+
+$CC $CFLAGS \
   tests/aetherworld_runtime_test.c \
   src/aetherworld.c \
   src/aetherworld_story.c \
