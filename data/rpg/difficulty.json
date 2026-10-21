@@ -1,0 +1,16 @@
+{
+  "difficulties": [
+    {"id":"normal","name":"Normal","tier":1,"enemy_health":1.0,"enemy_damage":1.0,"loot_multiplier":1.0,"mechanic_multiplier":1.0},
+    {"id":"veteran","name":"Veteran","tier":2,"enemy_health":1.35,"enemy_damage":1.20,"loot_multiplier":1.15,"mechanic_multiplier":1.15},
+    {"id":"hard","name":"Hard","tier":3,"enemy_health":1.75,"enemy_damage":1.45,"loot_multiplier":1.30,"mechanic_multiplier":1.35},
+    {"id":"nightmare","name":"Nightmare","tier":4,"enemy_health":2.30,"enemy_damage":1.85,"loot_multiplier":1.55,"mechanic_multiplier":1.70},
+    {"id":"ultimate_nightmare","name":"Ultimate Nightmare","tier":5,"enemy_health":3.20,"enemy_damage":2.50,"loot_multiplier":2.00,"mechanic_multiplier":2.25}
+  ],
+  "rules": {
+    "normal": ["standard mechanics"],
+    "veteran": ["additional elites","stronger mechanics"],
+    "hard": ["additional mechanics","reduced recovery","enhanced bosses"],
+    "nightmare": ["affixes","enrage timers","limited resurrection","elite reinforcements"],
+    "ultimate_nightmare": ["all nightmare mechanics","random encounter mutations","no automatic resurrection","exclusive loot tables","leaderboard eligibility"]
+  }
+}
