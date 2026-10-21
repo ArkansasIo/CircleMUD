@@ -19,6 +19,7 @@ OBJFILES = act.comm.o act.informative.o act.item.o act.movement.o \
 	bsd-snprintf.o aetherworld.o aetherworld_story.o \
 	rpg/rpg_level.o rpg/rpg_world_difficulty.o rpg/rpg_encounter.o \
 	rpg/rpg_rng.o rpg/rpg_loot.o rpg/rpg_world.o rpg/rpg_system.o \
+	rpg/rpg_runtime_tick.o \
 	rpg/rpg_catalog.o rpg/rpg_item.o rpg/rpg_equipment.o \
 	rpg/rpg_character.o rpg/rpg_character_value.o rpg/rpg_monster.o rpg/rpg_combat.o \
 	rpg/rpg_npc.o rpg/rpg_crafting.o rpg/rpg_loot_drop.o \
@@ -91,7 +92,7 @@ act.other.o: act.other.c conf.h sysdep.h structs.h utils.h comm.h interpreter.h 
 	$(CC) -c $(CFLAGS) act.other.c
 act.social.o: act.social.c conf.h sysdep.h structs.h utils.h comm.h interpreter.h handler.h db.h spells.h
 	$(CC) -c $(CFLAGS) act.social.c
-act.wizard.o: act.wizard.c conf.h sysdep.h structs.h utils.h comm.h interpreter.h handler.h db.h spells.h house.h screen.h
+act.wizard.o: act.wizard.c conf.h sysdep.h structs.h utils.h comm.h interpreter.h handler.h db.h spells.h house.h screen.h constants.h
 	$(CC) -c $(CFLAGS) act.wizard.c
 alias.o: alias.c conf.h sysdep.h structs.h utils.h interpreter.h db.h
 	$(CC) -c $(CFLAGS) alias.c
@@ -99,7 +100,7 @@ ban.o: ban.c conf.h sysdep.h structs.h utils.h comm.h interpreter.h handler.h db
 	$(CC) -c $(CFLAGS) ban.c
 boards.o: boards.c conf.h sysdep.h structs.h utils.h comm.h db.h boards.h interpreter.h handler.h
 	$(CC) -c $(CFLAGS) boards.c
-castle.o: castle.c conf.h sysdep.h structs.h utils.h comm.h handler.h db.h spells.h
+castle.o: castle.c conf.h sysdep.h structs.h comm.h handler.h db.h spells.h
 	$(CC) -c $(CFLAGS) castle.c
 class.o: class.c conf.h sysdep.h structs.h db.h utils.h spells.h interpreter.h constants.h
 	$(CC) -c $(CFLAGS) class.c
@@ -109,11 +110,11 @@ config.o: config.c conf.h sysdep.h structs.h interpreter.h
 	$(CC) -c $(CFLAGS) config.c
 constants.o: constants.c conf.h sysdep.h structs.h interpreter.h
 	$(CC) -c $(CFLAGS) constants.c
-db.o: db.c conf.h sysdep.h structs.h utils.h db.h comm.h handler.h spells.h mail.h interpreter.h house.h constants.h
+db.o: db.c conf.h sysdep.h structs.h utils.h comm.h handler.h spells.h mail.h interpreter.h house.h constants.h
 	$(CC) -c $(CFLAGS) db.c
 fight.o: fight.c conf.h sysdep.h structs.h utils.h comm.h handler.h interpreter.h db.h spells.h screen.h constants.h
 	$(CC) -c $(CFLAGS) fight.c
-graph.o: graph.c conf.h sysdep.h structs.h utils.h comm.h interpreter.h handler.h db.h spells.h
+graph.o: graph.c conf.h sysdep.h structs.h utils.h comm.h interpreter.h db.h spells.h
 	$(CC) -c $(CFLAGS) graph.c
 handler.o: handler.c conf.h sysdep.h structs.h utils.h comm.h db.h handler.h interpreter.h spells.h
 	$(CC) -c $(CFLAGS) handler.c
@@ -133,7 +134,7 @@ modify.o: modify.c conf.h sysdep.h structs.h utils.h interpreter.h handler.h db.
 	$(CC) -c $(CFLAGS) modify.c
 objsave.o: objsave.c conf.h sysdep.h structs.h comm.h handler.h db.h interpreter.h utils.h spells.h
 	$(CC) -c $(CFLAGS) objsave.c
-olc.o: olc.c conf.h sysdep.h structs.h utils.h comm.h interpreter.h db.h olc.h
+olc.o: olc.c conf.h sysdep.h structs.h utils.h comm.h db.h olc.h
 	$(CC) -c $(CFLAGS) olc.c
 random.o: random.c utils.h
 	$(CC) -c $(CFLAGS) random.c
