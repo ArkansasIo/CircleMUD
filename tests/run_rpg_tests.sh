@@ -97,6 +97,20 @@ $CC $CFLAGS \
 rm -f /tmp/circlemud-rpg-runtime-tick-tests
 
 $CC $CFLAGS \
+  tests/rpg_heartbeat_hook_test.c \
+  src/rpg/rpg_heartbeat_hook.c \
+  src/rpg/rpg_runtime_tick.c \
+  src/rpg/rpg_system.c \
+  src/rpg/rpg_world.c \
+  src/rpg/rpg_encounter.c \
+  src/rpg/rpg_level.c \
+  src/rpg/rpg_world_difficulty.c \
+  src/rpg/rpg_value.c \
+  -lm -o /tmp/circlemud-rpg-heartbeat-hook-tests
+/tmp/circlemud-rpg-heartbeat-hook-tests
+rm -f /tmp/circlemud-rpg-heartbeat-hook-tests
+
+$CC $CFLAGS \
   tests/aetherworld_runtime_test.c \
   src/aetherworld.c \
   src/aetherworld_story.c \
