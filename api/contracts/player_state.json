@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CircleMUD Player State",
+  "type": "object",
+  "required": ["id", "name", "level", "hp", "max_hp", "mana", "max_mana", "xp", "zone_id", "position"],
+  "properties": {
+    "id": {"type": "string"},
+    "name": {"type": "string"},
+    "level": {"type": "integer", "minimum": 1},
+    "hp": {"type": "integer", "minimum": 0},
+    "max_hp": {"type": "integer", "minimum": 1},
+    "mana": {"type": "integer", "minimum": 0},
+    "max_mana": {"type": "integer", "minimum": 0},
+    "xp": {"type": "integer", "minimum": 0},
+    "zone_id": {"type": "integer"},
+    "position": {"$ref": "./world_map.json#/$defs/Point"}
+  }
+}
