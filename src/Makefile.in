@@ -1,10 +1,8 @@
 # CircleMUD Makefile.in - Makefile template used by 'configure'
-#
 CC = @CC@
 CXREF = cxref
 MYFLAGS = @MYFLAGS@
-PROFILE = 
-
+PROFILE =
 BINDIR = ../bin
 CFLAGS = @CFLAGS@ $(MYFLAGS) $(PROFILE)
 LIBS = @LIBS@ @CRYPTLIB@ @NETLIB@
@@ -21,8 +19,8 @@ OBJFILES = act.comm.o act.informative.o act.item.o act.movement.o \
 	rpg/rpg_rng.o rpg/rpg_loot.o rpg/rpg_world.o rpg/rpg_system.o \
 	rpg/rpg_runtime_tick.o rpg/rpg_heartbeat_hook.o rpg/rpg_circlemud_bridge.o \
 	rpg/rpg_circlemud_mob_bridge.o rpg/rpg_circlemud_item_map.o \
-	rpg/rpg_circlemud_item_bridge.o rpg/rpg_live.o \
-	rpg/rpg_catalog.o rpg/rpg_item.o rpg/rpg_equipment.o \
+	rpg/rpg_circlemud_item_bridge.o rpg/rpg_circlemud_combat_bridge.o \
+	rpg/rpg_live.o rpg/rpg_catalog.o rpg/rpg_item.o rpg/rpg_equipment.o \
 	rpg/rpg_character.o rpg/rpg_character_value.o rpg/rpg_monster.o rpg/rpg_combat.o \
 	rpg/rpg_npc.o rpg/rpg_crafting.o rpg/rpg_loot_drop.o \
 	rpg/rpg_ability.o rpg/rpg_skill.o rpg/rpg_quest.o \
@@ -37,26 +35,19 @@ CXREF_FILES = act.comm.c act.informative.c act.item.c act.movement.c \
 	bsd-snprintf.c aetherworld.c aetherworld_story.c
 
 default: all
-
 all: .accepted
 	$(MAKE) $(BINDIR)/circle
 	$(MAKE) utils
-
 .accepted:
 	@./licheck @MORE@
-
 utils: .accepted
 	(cd util; $(MAKE) all)
-
 circle:
 	$(MAKE) $(BINDIR)/circle
-
 $(BINDIR)/circle : $(OBJFILES)
 	$(CC) -o $(BINDIR)/circle $(PROFILE) $(OBJFILES) $(LIBS) $(RPG_LIBS)
-
 clean:
 	rm -f *.o rpg/*.o
-
 ref:
 	@for file in $(CXREF_FILES) ; do \
 	  echo Cross referencing $$file ; \
@@ -76,6 +67,5 @@ ref:
 	  cat htmlh-head $$file htmlh-tail > doc/$$file.html ; \
 	done
 
-# RPG runtime modules. Pattern rule keeps the data-driven runtime isolated.
 rpg/%.o: rpg/%.c
 	$(CC) -c $(CFLAGS) -I./rpg $< -o $@
