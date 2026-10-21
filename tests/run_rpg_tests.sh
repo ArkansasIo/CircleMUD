@@ -53,6 +53,10 @@ $CC $CFLAGS tests/rpg_live_item_bridge_test.c $LIVE_SOURCES -lm -o /tmp/circlemu
 /tmp/circlemud-rpg-live-item-bridge-tests
 rm -f /tmp/circlemud-rpg-live-item-bridge-tests
 
+$CC $CFLAGS tests/rpg_live_monster_source_test.c $LIVE_SOURCES -lm -o /tmp/circlemud-rpg-live-monster-source-tests
+/tmp/circlemud-rpg-live-monster-source-tests
+rm -f /tmp/circlemud-rpg-live-monster-source-tests
+
 $CC $CFLAGS tests/rpg_circlemud_item_map_test.c src/rpg/rpg_circlemud_item_map.c src/rpg/rpg_catalog.c src/rpg/rpg_level.c src/rpg/rpg_loot.c -lm -o /tmp/circlemud-rpg-circlemud-item-map-tests
 /tmp/circlemud-rpg-circlemud-item-map-tests
 rm -f /tmp/circlemud-rpg-circlemud-item-map-tests
