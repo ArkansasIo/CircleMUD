@@ -3,6 +3,7 @@
 
 #include "rpg_character.h"
 #include "rpg_monster.h"
+#include "rpg_combat.h"
 #include "rpg_loot_drop.h"
 
 #define RPG_LIVE_MAX_PLAYERS 128
