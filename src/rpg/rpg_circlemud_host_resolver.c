@@ -19,27 +19,15 @@ int rpg_circlemud_host_player_exists(int player_id) {
 }
 
 int rpg_circlemud_host_monster_exists(int monster_id, int source_key) {
-  struct char_data *ch;
-
-  /* monster_id is an RPG identity, not a CircleMUD mob VNUM. The source key
-   * is therefore the only legacy identity accepted by this resolver. */
-  if (monster_id <= 0 || source_key == 0)
-    return 0;
-
-  for (ch = character_list; ch; ch = ch->next) {
-    if (!IS_NPC(ch))
-      continue;
-
-    /* Source-key translation is deliberately left to the mob bridge. This
-     * resolver only confirms that the legacy NPC population exists. */
-    (void)ch;
-  }
-
-  return 1;
+  /* RPG monster IDs are not CircleMUD mob VNUMs. Until the mob bridge exposes
+   * a concrete instance resolver, fail closed rather than claiming that an
+   * arbitrary NPC matches the event. */
+  (void)monster_id;
+  (void)source_key;
+  return 0;
 }
 
 void rpg_circlemud_install_host_adapter(void) {
-  /* Production callback installation is deferred until the concrete native
-   * combat/persistence API is selected. This function is intentionally a
-   * no-op rather than inventing a VNUM-to-instance mapping. */
+  /* Native callback installation remains deferred until the authoritative
+   * CircleMUD combat/persistence entry points are selected. */
 }
