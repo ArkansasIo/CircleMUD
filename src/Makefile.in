@@ -22,6 +22,7 @@ OBJFILES = act.comm.o act.informative.o act.item.o act.movement.o \
 	rpg/rpg_circlemud_item_bridge.o rpg/rpg_circlemud_combat_bridge.o \
 	rpg/rpg_circlemud_combat_consumer.o rpg/rpg_circlemud_combat_transaction.o \
 	rpg/rpg_circlemud_host_adapter.o rpg/rpg_circlemud_host_resolver.o \
+	rpg/rpg_circlemud_host_native.o rpg/rpg_circlemud_host_resolver.o \
 	rpg/rpg_live.o rpg/rpg_catalog.o rpg/rpg_item.o rpg/rpg_equipment.o \
 	rpg/rpg_character.o rpg/rpg_character_value.o rpg/rpg_monster.o rpg/rpg_combat.o \
 	rpg/rpg_npc.o rpg/rpg_crafting.o rpg/rpg_loot_drop.o \
