@@ -1,6 +1,7 @@
 #include "rpg_circlemud_bridge.h"
 
 #include "rpg_live.h"
+#include "rpg_circlemud_item_bridge.h"
 
 #include "db.h"
 #include "structs.h"
@@ -111,14 +112,14 @@ int rpg_circlemud_sync_character(struct char_data *ch) {
   circlemud_inventory_snapshot(ch, &inventory_count, &inventory_weight,
                                &equipment_count);
 
-  /*
-   * Keep ownership on the CircleMUD side for now. The RPG runtime receives
-   * a deterministic snapshot of location and object counts/weight; it does
-   * not retain obj_data pointers or alter legacy save-file state.
-   */
-  rpg_live_set_player_world_state(id, room_id, zone_id,
-                                  inventory_count, equipment_count,
-                                  inventory_weight);
+  if (!rpg_live_set_player_world_state(id, room_id, zone_id,
+                                       inventory_count, equipment_count,
+                                       inventory_weight))
+    return 0;
+
+  /* Objects are copied into RPG-owned storage; CircleMUD remains owner. */
+  if (!rpg_circlemud_sync_items(ch))
+    return 0;
 
   return 1;
 }
