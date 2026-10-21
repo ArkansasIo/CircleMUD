@@ -1,6 +1,5 @@
 # CircleMUD Makefile.in - Makefile template used by 'configure'
 #
-
 CC = @CC@
 CXREF = cxref
 MYFLAGS = @MYFLAGS@
@@ -9,6 +8,7 @@ PROFILE =
 BINDIR = ../bin
 CFLAGS = @CFLAGS@ $(MYFLAGS) $(PROFILE)
 LIBS = @LIBS@ @CRYPTLIB@ @NETLIB@
+RPG_LIBS = -lm
 
 OBJFILES = act.comm.o act.informative.o act.item.o act.movement.o \
 	act.offensive.o act.other.o act.social.o act.wizard.o alias.o ban.o \
@@ -16,7 +16,11 @@ OBJFILES = act.comm.o act.informative.o act.item.o act.movement.o \
 	graph.o handler.o house.o interpreter.o limits.o magic.o mail.o \
 	mobact.o modify.o objsave.o olc.o random.o shop.o spec_assign.o \
 	spec_procs.o spell_parser.o spells.o utils.o weather.o \
-	bsd-snprintf.o aetherworld.o aetherworld_story.o
+	bsd-snprintf.o aetherworld.o aetherworld_story.o \
+	rpg/rpg_level.o rpg/rpg_world_difficulty.o rpg/rpg_encounter.o \
+	rpg/rpg_rng.o rpg/rpg_loot.o rpg/rpg_world.o rpg/rpg_system.o \
+	rpg/rpg_catalog.o rpg/rpg_item.o rpg/rpg_equipment.o \
+	rpg/rpg_character.o rpg/rpg_monster.o rpg/rpg_combat.o
 
 CXREF_FILES = act.comm.c act.informative.c act.item.c act.movement.c \
 	act.offensive.c act.other.c act.social.c act.wizard.c alias.c ban.c \
@@ -42,10 +46,10 @@ circle:
 	$(MAKE) $(BINDIR)/circle
 
 $(BINDIR)/circle : $(OBJFILES)
-	$(CC) -o $(BINDIR)/circle $(PROFILE) $(OBJFILES) $(LIBS)
+	$(CC) -o $(BINDIR)/circle $(PROFILE) $(OBJFILES) $(LIBS) $(RPG_LIBS)
 
 clean:
-	rm -f *.o
+	rm -f *.o rpg/*.o
 
 ref:
 	@for file in $(CXREF_FILES) ; do \
@@ -65,6 +69,10 @@ ref:
 	  echo $$file ; \
 	  cat htmlh-head $$file htmlh-tail > doc/$$file.html ; \
 	done
+
+# RPG runtime modules. Pattern rule keeps the data-driven runtime isolated.
+rpg/%.o: rpg/%.c
+	$(CC) -c $(CFLAGS) -I./rpg $< -o $@
 
 act.comm.o: act.comm.c conf.h sysdep.h structs.h utils.h comm.h interpreter.h handler.h db.h screen.h
 	$(CC) -c $(CFLAGS) act.comm.c
