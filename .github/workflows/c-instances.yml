@@ -21,7 +21,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Compile and test procedural instances
-        run: sh tests/run_aetherworld_instance_tests.sh
+        run: |
+          sh tests/run_aetherworld_instance_tests.sh
+          sh tests/run_aetherworld_instance_manager_tests.sh
       - name: Run existing RPG and campaign tests
         run: |
           sh tests/run_rpg_tests.sh
