@@ -6,7 +6,7 @@ This checklist protects the boundary between the legacy CircleMUD server and the
 
 1. Initialize the RPG runtime once.
 2. Synchronize live PCs into the RPG adapter.
-3. Synchronize NPC prototypes by stable CircleMUD VNUM into the RPG world archetype layer.
+3. Reconcile live NPC instances into RPG-owned monster slots.
 4. Copy the current room/zone snapshot and RPG-owned item/equipment snapshot.
 5. Advance the RPG runtime by the fixed heartbeat delta.
 6. Run CircleMUD's original pending-character extraction.
@@ -23,12 +23,15 @@ The adapter must never retain a pointer to `struct char_data` or `struct obj_dat
 - A full player pool causes registration to fail safely; it must not overwrite an active player's state.
 - Room and zone identifiers are copied as scalar values only; `NOWHERE` is represented as `-1`.
 - Inventory and equipment are copied into fixed RPG-owned `rpg_item` storage; no CircleMUD object pointer is retained.
-- CircleMUD object VNUMs map directly to RPG catalog indices only when the VNUM is in `[0, RPG_CATALOG_TOTAL)`.
-- Unsupported/high VNUMs remain CircleMUD-only until an explicit content mapping table is introduced.
+- CircleMUD object VNUMs map through the explicit VNUM table first, with the conservative identity mapping retained for generated catalog ranges.
+- Unsupported/high VNUMs remain CircleMUD-only until an explicit content mapping is supplied.
 - Two legacy ring, neck, or wrist positions may collapse into the single corresponding RPG slot; the first mapped item wins.
-- NPC prototype synchronization uses VNUM as an archetype key. It does not claim that a VNUM uniquely identifies a live NPC instance.
-- NPC prototype health, damage, armor, level, and zone are copied as RPG-owned scalar values.
-- The generated monster catalog is used as a deterministic fallback mapping until a data-driven VNUM map is supplied.
+- NPC source keys are scalar reconciliation keys; no NPC pointer is retained by RPG state.
+- NPC source keys are marked during each authoritative reconciliation epoch.
+- NPC instances missing from a completed reconciliation epoch are removed from the RPG live monster pool.
+- Re-seeing the same NPC source key updates the existing RPG monster rather than allocating a duplicate.
+- RPG monster health, damage, armor, level, catalog index, and zone are copied as scalar values from CircleMUD.
+- The generated monster catalog remains a deterministic fallback for prototype-to-catalog translation.
 - The legacy player-file structures remain unchanged. In particular, do not alter the layout of `char_file_u` or `player_special_data_saved` without an explicit compatibility migration.
 - Synchronization copies the current legacy sheet; RPG simulation does not write combat results back to CircleMUD state until a controlled gameplay adapter and persistence regression tests are added.
 
@@ -41,7 +44,7 @@ sh tests/run_rpg_tests.sh
 sh tests/run_rpg_catalog_runtime_test.sh
 ```
 
-The RPG suite includes `tests/rpg_live_bridge_state_test.c` and `tests/rpg_live_item_bridge_test.c`, covering world snapshots, item ownership boundaries, equipment-slot state, validation, and unregister cleanup.
+The RPG suite now includes `tests/rpg_live_monster_source_test.c`, covering source-key reuse, scalar synchronization, and stale-instance cleanup.
 
 Run the legacy server build in a configured POSIX environment:
 
@@ -52,18 +55,18 @@ make -C src
 
 ## Item bridge policy
 
-The item adapter intentionally uses a conservative identity mapping instead of guessing how arbitrary CircleMUD VNUM ranges correspond to the generated RPG catalog. This keeps unrelated legacy content playable and prevents silently assigning incorrect RPG stats to objects.
+The item adapter uses a data-driven explicit VNUM table before falling back to identity mapping for generated RPG catalog ranges. This keeps unrelated legacy content playable while allowing imported worlds to map specific VNUMs to authoritative RPG definitions.
 
-The next content-pipeline step is a data-driven VNUM mapping table that can explicitly map legacy object VNUMs to RPG catalog entries, including weapons, armor, consumables, materials, and unique quest objects.
+Extend `src/rpg/rpg_circlemud_item_map.c` with the actual world-file VNUM mappings for weapons, armor, consumables, materials, and unique quest objects.
 
 ## NPC bridge policy
 
-CircleMUD's current `char_data` model does not provide a safe stable per-instance NPC identifier for the adapter to retain. The new bridge therefore synchronizes **NPC prototypes/archetypes**, keyed by `GET_MOB_VNUM()`, rather than fabricating live-instance identity. CircleMUD remains authoritative for actual NPC lifecycle and combat.
+CircleMUD's current `char_data` model does not provide a safe persistent per-instance NPC identifier for the adapter to retain. The live bridge therefore derives a scalar reconciliation key from the mob prototype RNUM/VNUM, room, and deterministic occurrence ordinal. This prevents duplicate RPG instances during normal heartbeat passes without retaining a `char_data` pointer.
 
-The RPG archetype uses the generated monster catalog for deterministic fallback stats and copies live CircleMUD prototype values when available. A future instance layer can be added once an explicit stable instance-ID policy exists.
+The derived key is deliberately an adapter boundary, not a persistence identity. A future host integration can replace it with an explicit stable NPC instance ID without changing the RPG monster API.
 
 ## Integration boundary still to implement
 
 The explicit extraction hook is available through `rpg_circlemud_on_character_extracted()`. It should be called from the server's authoritative extraction path when the host build is wired for the RPG bridge; the heartbeat sweep remains a defensive cleanup fallback.
 
-The next major stage is a data-driven legacy VNUM mapping layer and an explicit NPC instance-ID adapter. Avoid changing legacy save-file layouts or applying RPG combat, loot, or XP directly to a player until persistence and multiplayer consistency have dedicated tests.
+The next stage is controlled RPG combat/event propagation back into CircleMUD, including damage authorization, death handling, loot transfer, XP transfer, and persistence safeguards. Do not write RPG combat results directly into legacy character state until those contracts have dedicated multiplayer and save-file regression tests.
