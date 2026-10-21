@@ -19,6 +19,7 @@ Maintain the legacy CircleMUD codebase as a buildable, documented text-MUD found
 - [x] Level progression through level 720.
 - [x] Quest availability and registry validation.
 - [ ] Persist campaign progress in player save data through an explicit adapter.
+- [x] Document the CircleMUD RPG bridge lifecycle and validation invariants.
 - [ ] Add branching quest state and optional side objectives.
 - [ ] Add quest rewards for equipment, abilities, faction reputation, and titles.
 
