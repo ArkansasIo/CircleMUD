@@ -1,0 +1,37 @@
+{
+  "world": "world-001",
+  "maps": {
+    "dungeons": [
+      {"id":"dungeon-circlehold-depths","name":"Circlehold Depths","region":"Greenfall","level":12,"type":"dungeon","rooms":["gate","root-hall","cracked-chapel","warden-vault","depths-boss"],"boss":"The Rootbound Warden"},
+      {"id":"dungeon-black-forge","name":"Black Forge","region":"Ashen Reach","level":25,"type":"dungeon","rooms":["forge-gate","slagworks","chain-gallery","ember-core","forge-master"],"boss":"Forge-Master Veyr"},
+      {"id":"dungeon-drowned-archive","name":"Drowned Archive","region":"Drowned Archive","level":38,"type":"dungeon","rooms":["flooded-entry","silt-library","sunken-vault","memory-hall","archive-keeper"],"boss":"The Archive Keeper"},
+      {"id":"dungeon-void-chasm","name":"Void Chasm","region":"Void March","level":55,"type":"dungeon","rooms":["rift-mouth","starless-path","echo-pit","null-sanctum","chasm-heart"],"boss":"The Null Herald"}
+    ],
+    "trails": [
+      {"id":"trail-greenfall","name":"Greenfall Warden Trail","region":"Greenfall","stages":12,"checkpoints":[4,8,12],"boss":"Warden of Thorns"},
+      {"id":"trail-ash-road","name":"Ash Road Expedition","region":"Ashen Reach","stages":20,"checkpoints":[5,10,15,20],"boss":"Ashroad Colossus"},
+      {"id":"trail-sunken-road","name":"Sunken Memory Trail","region":"Drowned Archive","stages":24,"checkpoints":[6,12,18,24],"boss":"Memory Eater"},
+      {"id":"trail-crown","name":"Crown Ascension Trail","region":"Crown Plains","stages":30,"checkpoints":[10,20,30],"boss":"Crownless Champion"}
+    ],
+    "raids": [
+      {"id":"raid-war-beneath-world","name":"War Beneath the World","level":45,"size_profiles":[10,20,40],"wings":["Broken Gate","Deep War","Twelve Keys"],"bosses":["Gatebreaker","Buried General","Keybearer Prime","The Underking"]},
+      {"id":"raid-broken-circle","name":"The Broken Circle","level":60,"size_profiles":[10,20,40],"wings":["Veiled City","Black Spiral","Final Circle"],"bosses":["Veil Architect","Spiral Titan","The Twelvefold One","Aethernox Ascendant"]}
+    ],
+    "tower": {
+      "id":"tower-001","name":"Tower of the Broken Circle","floors":100,
+      "floor_maps":[
+        {"band":"1-10","theme":"Stone Gate","boss_floor":10},
+        {"band":"11-20","theme":"Iron Bastion","boss_floor":20},
+        {"band":"21-30","theme":"Verdant Ruins","boss_floor":30},
+        {"band":"31-40","theme":"Ashen Citadel","boss_floor":40},
+        {"band":"41-50","theme":"Arcane Vault","boss_floor":50},
+        {"band":"51-60","theme":"Void Observatory","boss_floor":60},
+        {"band":"61-70","theme":"Celestial Prison","boss_floor":70},
+        {"band":"71-80","theme":"Fallen Throne","boss_floor":80},
+        {"band":"81-90","theme":"Paradox Engine","boss_floor":90},
+        {"band":"91-99","theme":"Eternal Spiral","boss_floor":99},
+        {"band":"100","theme":"Tower Crown","boss_floor":100}
+      ]
+    }
+  }
+}
