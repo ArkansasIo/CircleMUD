@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CircleMUD Game Engine</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1017;--panel:#111a24;--line:#263647;--text:#d9e3ec;--muted:#7f94a8;--accent:#56b4e9}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px system-ui, sans-serif;height:100vh;overflow:hidden}
+#boot{position:fixed;inset:0;display:grid;place-items:center;background:#070b10;z-index:10}.boot-card{width:min(680px,90vw);padding:32px;background:var(--panel);border:1px solid var(--line);box-shadow:0 20px 80px #0008}.logo{font-size:28px;font-weight:700}.meta{color:var(--muted);margin:8px 0 28px}.bar{height:8px;background:#202c38}.fill{height:100%;width:0;background:var(--accent);transition:width .25s}.status{margin-top:12px;color:var(--muted)}
+#app{display:grid;grid-template-rows:42px 1fr 28px;height:100%}.top{display:flex;align-items:center;padding:0 14px;border-bottom:1px solid var(--line);background:#0e151e}.body{display:grid;grid-template-columns:210px 1fr 270px}.side,.inspector,.console{background:var(--panel);border-color:var(--line)}.side{border-right:1px solid var(--line);padding:10px}.side button{display:block;width:100%;text-align:left;padding:9px;margin:2px 0;background:transparent;color:var(--text);border:0}.side button:hover{background:#1b2835}.main{padding:20px}.inspector{border-left:1px solid var(--line);padding:14px}.console{border-top:1px solid var(--line);padding:5px 12px;color:var(--muted)}.badge{margin-left:auto;color:var(--accent)}
+</style>
+</head>
+<body>
+<div id="boot"><div class="boot-card"><div class="logo">CircleMUD Game Engine</div><div class="meta">ArkansasIo · v0.1.0 · PRE-ALPHA · ARK-CIRCLE-GE-0.1.0-PA-0001</div><div class="bar"><div class="fill" id="fill"></div></div><div class="status" id="status">Starting...</div></div></div>
+<div id="app"><header class="top"><b>CircleMUD</b><span class="badge">PRE-ALPHA 0.1.0</span></header><section class="body"><nav class="side"><button>World</button><button>Character</button><button>Quests</button><button>Inventory</button><button>Abilities</button><button>Factions</button><button>Combat</button><button>Settings</button><button>System</button></nav><main class="main"><h1>Command Center</h1><p>Application API connected. Select a workspace from the navigation panel.</p></main><aside class="inspector"><b>System</b><p>Developer: ArkansasIo</p><p>Build: ARK-CIRCLE-GE-0.1.0-PA-0001</p><p>API: 0.1</p></aside></section><footer class="console">READY · CircleMUD Application UI</footer></div>
+<script>
+const stages=[['Loading configuration',10],['Initializing engine',25],['Initializing database',40],['Loading world registry',55],['Loading Lua gameplay modules',70],['Validating game data',85],['Starting services',95],['Ready',100]];
+let i=0;function boot(){const [label,p]=stages[i++];document.getElementById('fill').style.width=p+'%';document.getElementById('status').textContent=label;if(p<100)setTimeout(boot,220);else setTimeout(()=>document.getElementById('boot').remove(),350)}boot();
+</script>
+</body>
+</html>
