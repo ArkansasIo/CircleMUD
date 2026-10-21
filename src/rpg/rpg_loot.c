@@ -14,15 +14,22 @@ double rpg_rarity_power_multiplier(rpg_rarity rarity) {
 }
 
 rpg_rarity rpg_roll_rarity(rpg_rng *rng, double loot_scale, int world_difficulty, int boss) {
-  double roll = rpg_rng_unit(rng);
-  double bonus = (loot_scale - 1.0) * 0.08 + (world_difficulty - 1) * 0.006 + (boss ? 0.08 : 0.0);
+  double bonus;
   double p[9] = {0.52,0.24,0.13,0.065,0.025,0.010,0.004,0.0015,0.0005};
+  double total = 0.0;
+  double roll;
   double cumulative = 0.0;
   int i;
+  if (!rng) return RPG_RARITY_COMMON;
+  bonus = (loot_scale - 1.0) * 0.08 + (world_difficulty - 1) * 0.006 + (boss ? 0.08 : 0.0);
+  if (bonus < 0.0) bonus = 0.0;
   for (i = 0; i < 9; ++i) {
-    double adjusted = p[i];
-    if (i > 3) adjusted *= (1.0 + bonus * (double)(i - 2));
-    cumulative += adjusted;
+    if (i > 3) p[i] *= (1.0 + bonus * (double)(i - 2));
+    total += p[i];
+  }
+  roll = rpg_rng_unit(rng) * total;
+  for (i = 0; i < 9; ++i) {
+    cumulative += p[i];
     if (roll <= cumulative) return (rpg_rarity)(i + 1);
   }
   return RPG_RARITY_ETERNAL;
