@@ -1,14 +1,5 @@
 #include "rpg_circlemud_item_map.h"
 
-/*
- * Keep this table explicit and reviewable.  Identity mappings cover the
- * generated RPG catalog range, while legacy content can be added here without
- * changing the bridge implementation.
- *
- * The initial entries intentionally document representative legacy VNUMs.
- * Projects importing an existing CircleMUD world should extend this table with
- * the actual object VNUMs from their world files.
- */
 static const rpg_circlemud_item_mapping mappings[] = {
   {1000, 0},
   {1001, 1},
@@ -46,6 +37,19 @@ int rpg_circlemud_item_catalog_index(int circlemud_vnum) {
         rpg_catalog_valid_index(mappings[i].rpg_catalog_index))
       return mappings[i].rpg_catalog_index;
   }
+
+  return -1;
+}
+
+int rpg_circlemud_item_vnum(int rpg_catalog_index) {
+  int i;
+
+  if (!rpg_catalog_valid_index(rpg_catalog_index))
+    return -1;
+
+  for (i = 0; i < rpg_circlemud_item_mapping_count(); ++i)
+    if (mappings[i].rpg_catalog_index == rpg_catalog_index)
+      return mappings[i].circlemud_vnum;
 
   return -1;
 }
