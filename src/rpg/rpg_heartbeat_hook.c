@@ -1,4 +1,5 @@
 #include "rpg_runtime_tick.h"
+#include "rpg_circlemud_bridge.h"
 
 /* Original CircleMUD declaration from handler.c. */
 void extract_pending_chars(void);
@@ -16,6 +17,9 @@ void circlemud_rpg_extract_pending_chars(void) {
     initialized = 1;
   }
 
+  /* Pull the authoritative legacy player sheet into the RPG representation
+   * before simulation. The runtime then processes combat/world/loot state. */
+  rpg_circlemud_sync_players();
   rpg_runtime_tick(0.1);
   extract_pending_chars();
 }
