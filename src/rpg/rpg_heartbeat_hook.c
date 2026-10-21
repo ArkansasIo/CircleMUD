@@ -9,6 +9,13 @@ void extract_pending_chars(void);
  * for every authoritative heartbeat pulse, including catch-up pulses.
  */
 void circlemud_rpg_extract_pending_chars(void) {
+  static int initialized = 0;
+
+  if (!initialized) {
+    rpg_runtime_tick_init();
+    initialized = 1;
+  }
+
   rpg_runtime_tick(0.1);
   extract_pending_chars();
 }
