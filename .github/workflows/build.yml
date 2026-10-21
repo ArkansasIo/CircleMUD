@@ -1,0 +1,39 @@
+name: CircleMUD build
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: circlemud-build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  linux-build:
+    name: Linux configure and build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes build-essential make
+
+      - name: Configure
+        run: ./configure
+        env:
+          # Keep diagnostics useful while allowing the legacy project to define flags.
+          CFLAGS: -O2
+
+      - name: Build engine and utilities
+        working-directory: src
+        run: make
