@@ -1,5 +1,8 @@
 #include "rpg_circlemud_bridge.h"
 
+#include "conf.h"
+#include "sysdep.h"
+
 #include "rpg_live.h"
 #include "rpg_circlemud_item_bridge.h"
 
@@ -83,7 +86,6 @@ int rpg_circlemud_sync_character(struct char_data *ch) {
   if (!rpg)
     return 0;
 
-  /* CircleMUD remains authoritative for the legacy character sheet. */
   if (ch->player.level > 0)
     rpg_character_set_level(rpg, ch->player.level);
 
@@ -117,7 +119,6 @@ int rpg_circlemud_sync_character(struct char_data *ch) {
                                        inventory_weight))
     return 0;
 
-  /* Objects are copied into RPG-owned storage; CircleMUD remains owner. */
   if (!rpg_circlemud_sync_items(ch))
     return 0;
 
@@ -138,7 +139,6 @@ int rpg_circlemud_unsync_character(struct char_data *ch) {
 }
 
 void rpg_circlemud_on_character_extracted(struct char_data *ch) {
-  /* Extraction can be reached from combat, rent, death, and admin paths. */
   (void)rpg_circlemud_unsync_character(ch);
 }
 
@@ -150,7 +150,6 @@ void rpg_circlemud_sync_players(void) {
   for (ch = character_list; ch; ch = ch->next)
     rpg_circlemud_sync_character(ch);
 
-  /* Remove RPG registrations for PCs that have left character_list. */
   state = rpg_live_get_state();
   for (i = 0; state && i < RPG_LIVE_MAX_PLAYERS; ++i) {
     if (state->players[i].active &&
