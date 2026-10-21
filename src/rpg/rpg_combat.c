@@ -26,15 +26,15 @@ rpg_attack_result rpg_calculate_attack(const rpg_character *attacker, const rpg_
   r.critical = 0;
   if (!attacker || !target || !target->alive || !rng) return r;
 
-  crit_chance = rpg_value_diminishing_value(attacker->stats.crit * 100.0, 70.0, 35.0) / 100.0;
-  crit_damage = rpg_value_stat_value(RPG_CONTEXT_PVE, RPG_VALUE_CRIT_DAMAGE, 100.0) / 100.0;
+  crit_chance = rpg_diminishing_value(attacker->stats.crit * 100.0, 70.0, 35.0) / 100.0;
+  crit_damage = rpg_stat_weight("crit_damage", RPG_CONTEXT_PVE);
   effective_power = attacker->stats.attack_power + attacker->equipment.pve_rating * 0.05;
   variance = 0.90 + rpg_rng_unit(rng) * 0.20;
   r.critical = rpg_rng_unit(rng) < crit_chance;
   r.critical_multiplier = 1.0 + crit_damage;
   r.raw_damage = effective_power * type_multiplier(type, target->catalog_index) * variance;
   if (r.critical) r.raw_damage *= r.critical_multiplier;
-  mitigation = 1.0 - rpg_armor_mitigation(target->armor, attacker->level);
+  mitigation = 1.0 - rpg_armor_mitigation(target->armor, (double)attacker->level, 100.0);
   r.mitigated_damage = r.raw_damage * mitigation;
   if (r.mitigated_damage < 0.0) r.mitigated_damage = 0.0;
   return r;
