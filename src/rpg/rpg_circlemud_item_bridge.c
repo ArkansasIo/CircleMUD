@@ -1,6 +1,6 @@
 #include "rpg_circlemud_item_bridge.h"
 
-#include "rpg_catalog.h"
+#include "rpg_circlemud_item_map.h"
 #include "rpg_equipment.h"
 #include "rpg_live.h"
 
@@ -9,9 +9,17 @@
 
 static int circlemud_catalog_index(const struct obj_data *obj) {
   int vnum;
+  int mapped;
+
   if (!obj)
     return -1;
+
   vnum = (int)GET_OBJ_VNUM(obj);
+  mapped = rpg_circlemud_item_catalog_index(vnum);
+  if (mapped >= 0)
+    return mapped;
+
+  /* Preserve the conservative compatibility path for generated worlds. */
   return rpg_catalog_valid_index(vnum) ? vnum : -1;
 }
 
