@@ -32,6 +32,7 @@ typedef struct {
   int initialized;
   double elapsed_seconds;
   int next_monster_id;
+  unsigned long monster_sync_epoch;
   rpg_live_player players[RPG_LIVE_MAX_PLAYERS];
   rpg_monster monsters[RPG_LIVE_MAX_MONSTERS];
 } rpg_live_state;
@@ -56,6 +57,14 @@ int rpg_live_set_player_equipment_slot(rpg_live_player *player,
                                        int equipment_slot, int inventory_index);
 
 int rpg_live_spawn_monster(int catalog_index, int zone_id, int difficulty);
+
+/* Begin/end one authoritative external NPC reconciliation pass. */
+void rpg_live_begin_monster_sync(void);
+void rpg_live_end_monster_sync(void);
+int rpg_live_sync_monster_source(int source_key, int catalog_index, int zone_id,
+                                 int difficulty, int level, double health,
+                                 double max_health, double damage, double armor);
+
 int rpg_live_attack(int player_id, int monster_id, rpg_damage_type type);
 int rpg_live_collect_loot(int player_id, int monster_id, rpg_loot_drop *drops, int max_drops);
 
