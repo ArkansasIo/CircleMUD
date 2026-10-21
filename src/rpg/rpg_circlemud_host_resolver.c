@@ -1,5 +1,7 @@
 #include "rpg_circlemud_host_resolver.h"
 
+#include "rpg_circlemud_mob_bridge.h"
+
 #include "db.h"
 #include "structs.h"
 #include "utils.h"
@@ -19,15 +21,11 @@ int rpg_circlemud_host_player_exists(int player_id) {
 }
 
 int rpg_circlemud_host_monster_exists(int monster_id, int source_key) {
-  /* RPG monster IDs are not CircleMUD mob VNUMs. Until the mob bridge exposes
-   * a concrete instance resolver, fail closed rather than claiming that an
-   * arbitrary NPC matches the event. */
   (void)monster_id;
-  (void)source_key;
-  return 0;
+  return rpg_circlemud_find_mob_by_source_key(source_key) != NULL;
 }
 
 void rpg_circlemud_install_host_adapter(void) {
-  /* Native callback installation remains deferred until the authoritative
-   * CircleMUD combat/persistence entry points are selected. */
+  /* Native callback installation is performed by the heartbeat hook after
+   * the RPG runtime has initialized. */
 }
