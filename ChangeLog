@@ -1,3 +1,16 @@
+AetherWorld Change Log
+======================
+
+2026-10-21 - World generation and game systems
+- Added a seeded procedural generator for dungeon, raid, trail, and tower instances.
+- Generated layouts include connected room paths, optional branches and loops, biome and difficulty metadata, raid checkpoints and bosses, and stair links between tower floors.
+- Added world APIs to create and remove generated instances and emit an instance-generated event.
+- Documented generator configuration, room records, and native-host integration in scripts/world/README.md.
+- The generator produces room graph data; mapping rooms to native game rooms and spawning encounters remain host responsibilities.
+- Continued the AetherWorld rebrand and RPG engine work while preserving upstream credits, license notices, and the original release archive below.
+
+Upstream CircleMUD release history follows. Historical entries below are preserved as recorded.
+
 Release history:
 
 Version 3.1  (yes, no beta pl): November 18, 2002

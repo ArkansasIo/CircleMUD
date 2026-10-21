@@ -1,4 +1,5 @@
 local OOP = require("scripts.core.oop")
+local RoomGenerator = require("scripts.world.generator")
 
 local World = OOP.class("World")
 
@@ -7,6 +8,26 @@ function World:initialize()
   self.time = 0
   self.entities = {}
   self.events = {}
+  self.instances = {}
+end
+
+function World:generate_instance(id, config)
+  if id == nil or self.instances[id] then
+    return nil, "instance id is missing or already in use"
+  end
+  local instance, err = RoomGenerator.generate(config)
+  if not instance then return nil, err end
+  instance.id = id
+  self.instances[id] = instance
+  self:emit("instance_generated", { instance_id = id, kind = instance.kind,
+    room_count = #instance.rooms, floor_count = #instance.floors, seed = instance.seed })
+  return instance
+end
+
+function World:remove_instance(id)
+  if not self.instances[id] then return false end
+  self.instances[id] = nil
+  return true
 end
 
 function World:set_difficulty(tier)
