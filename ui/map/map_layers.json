@@ -1,0 +1,20 @@
+{
+  "layers": [
+    {"id":"continents","label":"Continents","enabled":true,"zoom_min":0.25},
+    {"id":"regions","label":"Regions","enabled":true,"zoom_min":0.4},
+    {"id":"biomes","label":"Biomes","enabled":true,"zoom_min":0.5},
+    {"id":"zones","label":"Zones","enabled":true,"zoom_min":0.7},
+    {"id":"subzones","label":"Sub-Zones","enabled":true,"zoom_min":1.0},
+    {"id":"settlements","label":"Settlements","enabled":true,"zoom_min":0.5},
+    {"id":"dungeons","label":"Dungeons & Raids","enabled":true,"zoom_min":0.65},
+    {"id":"quests","label":"Quest Objectives","enabled":true,"zoom_min":0.75},
+    {"id":"npcs","label":"NPCs","enabled":false,"zoom_min":1.0},
+    {"id":"players","label":"Players / Party","enabled":true,"zoom_min":0.8},
+    {"id":"flight","label":"Flight & Transport","enabled":false,"zoom_min":0.5},
+    {"id":"resources","label":"Resource Nodes","enabled":false,"zoom_min":1.1},
+    {"id":"factions","label":"Faction Territory","enabled":false,"zoom_min":0.4},
+    {"id":"pvp","label":"PvP Objectives","enabled":false,"zoom_min":0.7},
+    {"id":"events","label":"Dynamic Events","enabled":true,"zoom_min":0.65},
+    {"id":"fog","label":"Fog of War","enabled":true,"zoom_min":0.1}
+  ]
+}
