@@ -61,6 +61,10 @@ $CC $CFLAGS tests/rpg_circlemud_item_map_test.c src/rpg/rpg_circlemud_item_map.c
 /tmp/circlemud-rpg-circlemud-item-map-tests
 rm -f /tmp/circlemud-rpg-circlemud-item-map-tests
 
+$CC $CFLAGS tests/rpg_circlemud_combat_bridge_test.c src/rpg/rpg_circlemud_combat_bridge.c src/rpg/rpg_catalog.c src/rpg/rpg_level.c src/rpg/rpg_loot.c -lm -o /tmp/circlemud-rpg-circlemud-combat-bridge-tests
+/tmp/circlemud-rpg-circlemud-combat-bridge-tests
+rm -f /tmp/circlemud-rpg-circlemud-combat-bridge-tests
+
 $CC $CFLAGS tests/aetherworld_runtime_test.c src/aetherworld.c src/aetherworld_story.c -o /tmp/aetherworld-tests
 /tmp/aetherworld-tests
 rm -f /tmp/aetherworld-tests
