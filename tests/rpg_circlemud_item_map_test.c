@@ -16,6 +16,10 @@ int main(void) {
   assert(rpg_circlemud_item_catalog_index(1000) == 0);
   assert(rpg_circlemud_item_catalog_index(1100) == 150);
   assert(rpg_circlemud_item_catalog_index(1500) == 750);
+  assert(rpg_circlemud_item_vnum(0) == 1000);
+  assert(rpg_circlemud_item_vnum(150) == 1100);
+  assert(rpg_circlemud_item_vnum(750) == 1500);
+  assert(rpg_circlemud_item_vnum(999) == -1);
   assert(rpg_circlemud_item_catalog_index(999) == -1);
   assert(rpg_circlemud_item_catalog_index(-1) == -1);
 
