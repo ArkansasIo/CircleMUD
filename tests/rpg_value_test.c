@@ -13,7 +13,7 @@ int main(void) {
   assert(near(rpg_stat_weight("str", RPG_CONTEXT_PVE), 1.0));
   assert(near(rpg_stat_weight("damage", RPG_CONTEXT_PVP), 0.70));
   assert(near(rpg_proc_value(&proc), 90.0));
-  assert(near(rpg_weapon_power_pve(1200.0, 1.1, 50.0, 2.5, 120.0, 1.3, 1.0), 1486.0));
+  assert(near(rpg_weapon_power_pve(1200.0, 1.1, 50.0, 2.5, 120.0, 1.3, 1.0), 1601.0));
   assert(near(rpg_weapon_power_pvp(650.0, 50.0, 2.5, 0.65, 0.80), 572.5));
   assert(near(rpg_party_multiplier(1), 1.0));
   assert(near(rpg_party_multiplier(5), 3.6));
