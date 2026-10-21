@@ -55,6 +55,24 @@ $CC $CFLAGS \
 rm -f /tmp/circlemud-rpg-character-value-tests
 
 $CC $CFLAGS \
+  tests/rpg_combat_value_test.c \
+  src/rpg/rpg_character.c \
+  src/rpg/rpg_character_value.c \
+  src/rpg/rpg_level.c \
+  src/rpg/rpg_item.c \
+  src/rpg/rpg_catalog.c \
+  src/rpg/rpg_equipment.c \
+  src/rpg/rpg_value.c \
+  src/rpg/rpg_monster.c \
+  src/rpg/rpg_encounter.c \
+  src/rpg/rpg_world_difficulty.c \
+  src/rpg/rpg_rng.c \
+  src/rpg/rpg_combat.c \
+  -lm -o /tmp/circlemud-rpg-combat-value-tests
+/tmp/circlemud-rpg-combat-value-tests
+rm -f /tmp/circlemud-rpg-combat-value-tests
+
+$CC $CFLAGS \
   tests/aetherworld_runtime_test.c \
   src/aetherworld.c \
   src/aetherworld_story.c \
