@@ -1,4 +1,5 @@
 #include "rpg_item.h"
+#include <stddef.h>
 
 int rpg_item_init(rpg_item *item, int catalog_index, int instance_id) {
   if (!item || !rpg_catalog_valid_index(catalog_index)) return 0;
@@ -47,13 +48,13 @@ double rpg_item_rating(const rpg_item *item, rpg_value_context context) {
   rarity_scale = 1.0 + ((double)item->catalog.rarity * 0.10);
   if (item->catalog.category == RPG_CATALOG_WEAPON) {
     stats.damage = item->catalog.power * rarity_scale;
-    return rpg_item_power(context, &stats, NULL, 0.0);
+    return rpg_item_power(&stats, context, NULL, 0, 0.0);
   }
   if (item->catalog.category == RPG_CATALOG_ARMOR) {
     stats.armor = item->catalog.defense * rarity_scale;
     stats.health = item->catalog.power * 0.5 * rarity_scale;
-    return rpg_item_power(context, &stats, NULL, 0.0);
+    return rpg_item_power(&stats, context, NULL, 0, 0.0);
   }
   stats.health = item->catalog.power * rarity_scale;
-  return rpg_item_power(context, &stats, NULL, item->catalog.value * 0.01);
+  return rpg_item_power(&stats, context, NULL, 0, item->catalog.value * 0.01);
 }
