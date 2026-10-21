@@ -17,6 +17,28 @@
  * avoiding retention of a char_data pointer. A future host integration can
  * replace the derived key with a true instance ID without changing RPG state.
  */
+static int circlemud_mob_source_key(const struct char_data *mob, int ordinal) {
+  long long key;
+  int room = -1;
+  int rnum;
+  int vnum;
+
+  if (!mob || ordinal < 0)
+    return 0;
+
+  vnum = GET_MOB_VNUM(mob);
+  rnum = GET_MOB_RNUM(mob);
+  if (IN_ROOM(mob) != NOWHERE)
+    room = (int)IN_ROOM(mob);
+
+  key = ((long long)(rnum + 1) * 1000003LL) ^
+        ((long long)(vnum + 1) * 9176LL) ^
+        ((long long)(room + 2) * 131LL) ^
+        ((long long)(ordinal + 1) * 17LL);
+  key &= 0x7fffffffLL;
+  return key > 0 ? (int)key : 1;
+}
+
 static int circlemud_mob_catalog_index(int vnum) {
   int local;
 
@@ -40,28 +62,6 @@ static int circlemud_mob_tier(const rpg_catalog_entry *entry) {
     case 4: return RPG_MOB_WORLD_BOSS;
     default: return RPG_MOB_NORMAL;
   }
-}
-
-static int circlemud_mob_source_key(const struct char_data *mob, int ordinal) {
-  long long key;
-  int room = -1;
-  int rnum;
-  int vnum;
-
-  if (!mob || ordinal < 0)
-    return 0;
-
-  vnum = GET_MOB_VNUM(mob);
-  rnum = GET_MOB_RNUM(mob);
-  if (IN_ROOM(mob) != NOWHERE)
-    room = (int)IN_ROOM(mob);
-
-  key = ((long long)(rnum + 1) * 1000003LL) ^
-        ((long long)(vnum + 1) * 9176LL) ^
-        ((long long)(room + 2) * 131LL) ^
-        ((long long)(ordinal + 1) * 17LL);
-  key &= 0x7fffffffLL;
-  return key > 0 ? (int)key : 1;
 }
 
 int rpg_circlemud_sync_mob_prototype(struct char_data *mob) {
@@ -144,4 +144,23 @@ void rpg_circlemud_sync_mob_prototypes(void) {
   }
 
   rpg_live_end_monster_sync();
+}
+
+struct char_data *rpg_circlemud_find_mob_by_source_key(int source_key) {
+  struct char_data *mob;
+  int ordinal = 0;
+
+  if (source_key <= 0)
+    return NULL;
+
+  for (mob = character_list; mob; mob = mob->next) {
+    if (!IS_NPC(mob) || !IS_MOB(mob))
+      continue;
+
+    ++ordinal;
+    if (circlemud_mob_source_key(mob, ordinal) == source_key)
+      return mob;
+  }
+
+  return NULL;
 }
