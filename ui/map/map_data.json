@@ -1,0 +1,21 @@
+{
+  "map": {"id":"world-001","name":"The Broken Circle","width":2400,"height":1600,"tile_size":32},
+  "regions":[
+    {"id":"r1","name":"Greenfall","type":"Temperate Forest","x":160,"y":180,"w":620,"h":420,"color":"#274936"},
+    {"id":"r2","name":"Ashen Reach","type":"Volcanic","x":860,"y":120,"w":520,"h":360,"color":"#51342f"},
+    {"id":"r3","name":"Crown Plains","type":"Plains","x":420,"y":760,"w":680,"h":430,"color":"#665d32"},
+    {"id":"r4","name":"Drowned Archive","type":"Swamp","x":1260,"y":620,"w":620,"h":420,"color":"#304b45"}
+  ],
+  "locations":[
+    {"id":"loc-capital","name":"Circlehold","kind":"capital","region":"r1","x":420,"y":350},
+    {"id":"loc-dungeon","name":"Black Forge","kind":"dungeon","region":"r2","x":1110,"y":290},
+    {"id":"loc-village","name":"Ravenwatch","kind":"village","region":"r3","x":760,"y":930},
+    {"id":"loc-archive","name":"Drowned Archive","kind":"dungeon","region":"r4","x":1540,"y":820}
+  ],
+  "roads":[
+    [[420,350],[760,930],[1110,290]],
+    [[760,930],[1540,820]],
+    [[420,350],[1540,820]]
+  ],
+  "player":{"x":420,"y":350,"zone":"Circlehold"}
+}
