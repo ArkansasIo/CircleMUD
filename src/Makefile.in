@@ -23,13 +23,13 @@ OBJFILES = act.comm.o act.informative.o act.item.o act.movement.o \
 	rpg/rpg_character.o rpg/rpg_monster.o rpg/rpg_combat.o \
 	rpg/rpg_npc.o rpg/rpg_crafting.o rpg/rpg_loot_drop.o \
 	rpg/rpg_ability.o rpg/rpg_skill.o rpg/rpg_quest.o \
-	rpg/rpg_value.o
+	rpg/rpg_quest_runtime.o rpg/rpg_value.o
 
 CXREF_FILES = act.comm.c act.informative.c act.item.c act.movement.c \
 	act.offensive.c act.other.c act.social.c act.wizard.c alias.c ban.c \
 	boards.c castle.c class.c comm.c config.c constants.c db.c fight.c \
 	graph.c handler.c house.c interpreter.c limits.c magic.c mail.c \
-	mobact.c modify.c objsave.c olc.c random.c shop.c spec_assign.c\
+	mobact.c modify.c objsave.c olc.c random.c shop.c spec_assign.c \
 	spec_procs.c spell_parser.c spells.c utils.c weather.c \
 	bsd-snprintf.c aetherworld.c aetherworld_story.c
 
@@ -123,7 +123,7 @@ interpreter.o: interpreter.c conf.h sysdep.h structs.h comm.h interpreter.h db.h
 	$(CC) -c $(CFLAGS) interpreter.c
 limits.o: limits.c conf.h sysdep.h structs.h utils.h spells.h comm.h db.h handler.h
 	$(CC) -c $(CFLAGS) limits.c
-magic.o: magic.c conf.h sysdep.h structs.h utils.h comm.h spells.h handler.h db.h constants.h
+magic.o: magic.c conf.h sysdep.h structs.h utils.h comm.h spells.h handler.h db.h constants.h interpreter.h
 	$(CC) -c $(CFLAGS) magic.c
 mail.o: mail.c conf.h sysdep.h structs.h utils.h comm.h db.h interpreter.h handler.h mail.h
 	$(CC) -c $(CFLAGS) mail.c
@@ -141,7 +141,7 @@ shop.o: shop.c conf.h sysdep.h structs.h comm.h handler.h db.h interpreter.h uti
 	$(CC) -c $(CFLAGS) shop.c
 spec_assign.o: spec_assign.c conf.h sysdep.h structs.h db.h interpreter.h utils.h
 	$(CC) -c $(CFLAGS) spec_assign.c
-spec_procs.o: spec_procs.c conf.h sysdep.h structs.h utils.h comm.h interpreter.h handler.h db.h spells.h constants.h
+spec_procs.o: spec_procs.c conf.h sysdep.h structs.h utils.h comm.h handler.h db.h spells.h constants.h
 	$(CC) -c $(CFLAGS) spec_procs.c
 spell_parser.o: spell_parser.c conf.h sysdep.h structs.h utils.h interpreter.h spells.h handler.h comm.h db.h
 	$(CC) -c $(CFLAGS) spell_parser.c
