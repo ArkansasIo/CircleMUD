@@ -1,5 +1,8 @@
 #include "rpg_circlemud_mob_bridge.h"
 
+#include "conf.h"
+#include "sysdep.h"
+
 #include "rpg_catalog.h"
 #include "rpg_live.h"
 #include "rpg_types.h"
@@ -49,19 +52,6 @@ static int circlemud_mob_catalog_index(int vnum) {
   if (local < 0)
     local += RPG_CATALOG_MONSTERS;
   return 750 + local;
-}
-
-static int circlemud_mob_tier(const rpg_catalog_entry *entry) {
-  if (!entry)
-    return RPG_MOB_NORMAL;
-
-  switch (entry->subtype % 5) {
-    case 1: return RPG_MOB_ELITE;
-    case 2: return RPG_MOB_RARE;
-    case 3: return RPG_MOB_CHAMPION;
-    case 4: return RPG_MOB_WORLD_BOSS;
-    default: return RPG_MOB_NORMAL;
-  }
 }
 
 int rpg_circlemud_sync_mob_prototype(struct char_data *mob) {
