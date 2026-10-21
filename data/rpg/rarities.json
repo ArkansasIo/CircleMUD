@@ -1,0 +1,20 @@
+{
+  "rarities": [
+    {"id":"common","name":"Common","tier":1,"power_multiplier":1.00,"drop_weight":1000},
+    {"id":"uncommon","name":"Uncommon","tier":2,"power_multiplier":1.08,"drop_weight":500},
+    {"id":"rare","name":"Rare","tier":3,"power_multiplier":1.18,"drop_weight":250},
+    {"id":"epic","name":"Epic","tier":4,"power_multiplier":1.32,"drop_weight":100},
+    {"id":"legendary","name":"Legendary","tier":5,"power_multiplier":1.50,"drop_weight":30},
+    {"id":"mythic","name":"Mythic","tier":6,"power_multiplier":1.75,"drop_weight":10},
+    {"id":"ancient","name":"Ancient","tier":7,"power_multiplier":2.05,"drop_weight":3},
+    {"id":"transcendent","name":"Transcendent","tier":8,"power_multiplier":2.40,"drop_weight":1},
+    {"id":"eternal","name":"Eternal","tier":9,"power_multiplier":3.00,"drop_weight":0}
+  ],
+  "rules": {
+    "boss_bonus": true,
+    "difficulty_bonus": true,
+    "smart_loot": true,
+    "duplicate_protection": true,
+    "bind_modes": ["none","bind_on_equip","bind_on_pickup"]
+  }
+}
