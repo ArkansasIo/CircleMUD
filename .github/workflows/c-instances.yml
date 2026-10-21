@@ -1,0 +1,30 @@
+name: AetherWorld C tests
+
+on:
+  push:
+    branches: [master, main, feature/c-instances]
+  pull_request:
+    branches: [master, main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: aetherworld-c-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  c-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compile and test procedural instances
+        run: sh tests/run_aetherworld_instance_tests.sh
+      - name: Run existing RPG and campaign tests
+        run: |
+          sh tests/run_rpg_tests.sh
+          sh tests/run_rpg_catalog_runtime_test.sh
+      - name: Validate source contracts
+        run: sh tests/check_source_contract.sh
