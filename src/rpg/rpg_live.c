@@ -23,9 +23,12 @@ static rpg_monster *find_monster(int monster_id) {
 }
 
 void rpg_live_init(void) {
+  int i;
   memset(&state, 0, sizeof(state));
   state.initialized = 1;
   state.next_monster_id = 1;
+  for (i = 0; i < RPG_LIVE_MAX_MONSTERS; ++i)
+    state.monsters[i].catalog_index = -1;
   rpg_rng_seed(&rng, 0xC1A1E57u);
 }
 
