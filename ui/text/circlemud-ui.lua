@@ -13,15 +13,15 @@ end
 
 function TextUI:show_header()
   print("+--------------------------------------------------+")
-  print("| CIRCLEMUD GAME ENGINE 0.1.0 PRE-ALPHA           |")
-  print("| ArkansasIo | ARK-CIRCLE-GE-0.1.0-PA-0001        |")
+  print("| AETHERWORLD RPG ENGINE 0.1.0 PRE-ALPHA          |")
+  print("| ArkansasIo | AETHERWORLD-GE-0.1.0-PA-0001       |")
   print("+--------------------------------------------------+")
 end
 
 function TextUI:show_menu()
   print("1 World     2 Character     3 Quests")
   print("4 Inventory 5 Abilities     6 Factions")
-  print("7 Combat    8 Settings      9 System")
+  print("7 Combat    8 Campaign     9 System")
 end
 
 function TextUI:run()
