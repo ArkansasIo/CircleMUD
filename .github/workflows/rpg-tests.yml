@@ -12,4 +12,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build and run RPG and AetherWorld runtime tests
-        run: sh tests/run_rpg_tests.sh
+        run: |
+          sh tests/run_rpg_tests.sh
+          sh tests/run_rpg_catalog_runtime_test.sh
