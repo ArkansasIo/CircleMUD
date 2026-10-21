@@ -65,6 +65,14 @@ $CC $CFLAGS tests/rpg_circlemud_combat_bridge_test.c src/rpg/rpg_circlemud_comba
 /tmp/circlemud-rpg-circlemud-combat-bridge-tests
 rm -f /tmp/circlemud-rpg-circlemud-combat-bridge-tests
 
+$CC $CFLAGS tests/rpg_circlemud_combat_transaction_test.c src/rpg/rpg_circlemud_combat_bridge.c src/rpg/rpg_circlemud_combat_transaction.c $LIVE_SOURCES -lm -o /tmp/circlemud-rpg-circlemud-combat-transaction-tests
+/tmp/circlemud-rpg-circlemud-combat-transaction-tests
+rm -f /tmp/circlemud-rpg-circlemud-combat-transaction-tests
+
+$CC $CFLAGS tests/rpg_circlemud_combat_consumer_test.c src/rpg/rpg_circlemud_combat_bridge.c src/rpg/rpg_circlemud_combat_transaction.c src/rpg/rpg_circlemud_combat_consumer.c $LIVE_SOURCES -lm -o /tmp/circlemud-rpg-circlemud-combat-consumer-tests
+/tmp/circlemud-rpg-circlemud-combat-consumer-tests
+rm -f /tmp/circlemud-rpg-circlemud-combat-consumer-tests
+
 $CC $CFLAGS tests/aetherworld_runtime_test.c src/aetherworld.c src/aetherworld_story.c -o /tmp/aetherworld-tests
 /tmp/aetherworld-tests
 rm -f /tmp/aetherworld-tests
