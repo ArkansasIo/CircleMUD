@@ -285,12 +285,12 @@ long asciiflag_conv(char *flag)
   register char *p;
 
   for (p = flag; *p; p++) {
-    if (islower(*p))
+    if (islower((unsigned char)*p))
       flags |= 1 << (*p - 'a');
-    else if (isupper(*p))
+    else if (isupper((unsigned char)*p))
       flags |= 1 << (26 + (*p - 'A'));
 
-    if (!isdigit(*p))
+    if (!isdigit((unsigned char)*p))
       is_number = 0;
   }
 

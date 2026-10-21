@@ -707,7 +707,7 @@ ACMD(do_wimpy)
       return;
     }
   }
-  if (isdigit(*arg)) {
+  if (isdigit((unsigned char)*arg)) {
     if ((wimp_lev = atoi(arg)) != 0) {
       if (wimp_lev < 0)
 	send_to_char(ch, "Heh, heh, heh.. we are jolly funny today, eh?\r\n");

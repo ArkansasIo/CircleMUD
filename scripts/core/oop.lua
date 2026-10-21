@@ -1,4 +1,4 @@
--- Generic object-oriented programming helpers for CircleMUD Lua.
+-- Generic object-oriented programming helpers for AetherWorld Lua.
 -- Uses tables + metatables and supports single inheritance.
 
 local OOP = {}
@@ -22,7 +22,10 @@ function OOP.class(name, base)
   end
 
   function cls:is_a(target)
-    local current = cls
+    local current = self
+    if rawget(self, "__index") ~= self then
+      current = getmetatable(self)
+    end
     while current do
       if current == target then
         return true

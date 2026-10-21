@@ -111,7 +111,7 @@ void add_name(byte level, char *name)
     return;
 
   for (ptr = name; *ptr; ptr++)
-    if (!isalpha(*ptr))
+    if (!isalpha((unsigned char)*ptr))
       return;
 
   tmp = (struct name_rec *) malloc(sizeof(struct name_rec));
@@ -156,7 +156,7 @@ void write_wizlist(FILE * out, int minlev, int maxlev)
 
   fprintf(out,
 "*************************************************************************\n"
-"* The following people have reached immortality on CircleMUD.  They are *\n"
+"* The following people have reached immortality on AetherWorld.  They are *\n"
 "* to be treated with respect and awe.  Occasional prayers to them are   *\n"
 "* advisable.  Annoying them is not recommended.  Stealing from them is  *\n"
 "* punishable by immediate death.                                        *\n"

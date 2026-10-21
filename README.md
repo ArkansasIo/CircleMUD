@@ -18,6 +18,10 @@ make
 
 Read `doc/README.UNIX` and the original `README` for platform-specific details. The source is historically old, so modern compilers may expose compatibility warnings; CI treats an actual build failure as a failure rather than assuming warnings are harmless.
 
+## Run on Windows
+
+After building the server, double-click `output/Start-AetherWorld.bat`. This starts `output/circle.exe` from the project root so it can locate the `lib` game data. The launcher keeps the console open after the server exits so startup errors remain visible. The server listens on port `4000` by default.
+
 ## RPG runtime tests
 
 Run the isolated regression suite with:
@@ -30,6 +34,8 @@ The suite covers the existing RPG helpers plus the AetherWorld campaign registry
 
 ## AetherWorld systems
 
+- Seeded BSP and cellular-automata dungeon layouts with room graphs, corridors, optional loops/secrets, gameplay budgets, and reachability validation.
+- Procedural raid, trail, and multi-floor tower instances using the same generation pipeline.
 - 12-act campaign progression.
 - 50 main and side quests with prerequisite chains.
 - Level range 1–720.

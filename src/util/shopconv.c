@@ -15,7 +15,8 @@ void basic_mud_log(const char *x, ...)
 
 char *fread_string(FILE * fl, const char *error)
 {
-  char buf[MAX_STRING_LENGTH], tmp[512], *rslt, *point;
+  char buf[MAX_STRING_LENGTH], tmp[512], *rslt;
+  size_t length, end;
   int flag;
 
   *buf = '\0';
@@ -25,20 +26,21 @@ char *fread_string(FILE * fl, const char *error)
       printf("fread_string: format error at or near %s\n", error);
       exit(1);
     }
-    if (strlen(tmp) + strlen(buf) > MAX_STRING_LENGTH) {
+    if (strlen(tmp) + strlen(buf) >= sizeof(buf)) {
       printf("SYSERR: fread_string: string too large (shopconv.c)");
       exit(1);
     } else
       strcat(buf, tmp);
 
-    for (point = buf + strlen(buf) - 2; point >= buf && isspace(*point);
-	 point--);
-    if ((flag = (*point == '~'))) {
-      if (*(buf + strlen(buf) - 3) == '\n')
-	*(buf + strlen(buf) - 2) = '\0';
-      else
-	*(buf + strlen(buf) - 2) = '\0';
-    }
+    length = strlen(buf);
+    end = length;
+    if (end > 0 && buf[end - 1] == '\n')
+      end--;
+    while (end > 0 && isspace((unsigned char)buf[end - 1]))
+      end--;
+    flag = end > 0 && buf[end - 1] == '~';
+    if (flag)
+      buf[end - 1] = '\0';
   } while (!flag);
 
   /* do the allocate boogie  */
@@ -95,7 +97,7 @@ void do_string(FILE * shop_f, FILE * newshop_f, char *msg)
   char *ptr;
 
   ptr = fread_string(shop_f, msg);
-  fprintf(newshop_f, "%s~\n", ptr);
+  fprintf(newshop_f, "%s~\n", ptr ? ptr : "");
   free(ptr);
 }
 
@@ -150,7 +152,9 @@ int boot_the_shops(FILE * shop_f, FILE * newshop_f, char *filename)
 int main(int argc, char *argv[])
 {
   FILE *sfp, *nsfp;
-  char fn[256], part[256];
+  char *fn;
+  char *part, *backup;
+  size_t path_length;
   int result, index;
 
   if (argc < 2) {
@@ -158,17 +162,36 @@ int main(int argc, char *argv[])
     exit(1);
   }
   for (index = 1; index < argc; index++) {
-    sprintf(fn, "%s", argv[index]);
-    sprintf(part, "mv %s %s.tmp", fn, fn);
-    system(part);
-    sprintf(part, "%s.tmp", fn);
+    fn = argv[index];
+    path_length = strlen(fn);
+    part = malloc(path_length + sizeof(".tmp"));
+    backup = malloc(path_length + sizeof(".bak"));
+    if (!part || !backup) {
+      fprintf(stderr, "Unable to allocate path buffers for %s.\n", fn);
+      free(part);
+      free(backup);
+      continue;
+    }
+    snprintf(part, path_length + sizeof(".tmp"), "%s.tmp", fn);
+    snprintf(backup, path_length + sizeof(".bak"), "%s.bak", fn);
+    if (rename(fn, part) != 0) {
+      perror(fn);
+      free(part);
+      free(backup);
+      continue;
+    }
     sfp = fopen(part, "r");
     if (sfp == NULL) {
-      strcat(fn, " could not be opened");
-      perror(fn);
+      perror(part);
+      rename(part, fn);
     } else {
       if ((nsfp = fopen(fn, "w")) == NULL) {
 	printf("Error writing to %s.\n", fn);
+	perror(fn);
+	fclose(sfp);
+	rename(part, fn);
+	free(part);
+	free(backup);
 	continue;
       }
       printf("%s:\n", fn);
@@ -176,14 +199,18 @@ int main(int argc, char *argv[])
       fclose(nsfp);
       fclose(sfp);
       if (result) {
-	sprintf(part, "mv %s.tmp %s", fn, fn);
-	system(part);
+	if (rename(part, fn) != 0)
+	  perror(part);
       } else {
-	sprintf(part, "mv %s.tmp %s.bak", fn, fn);
-	system(part);
-	printf("Done!\n");
+	remove(backup);
+	if (rename(part, backup) != 0)
+	  perror(part);
+	else
+	  printf("Done!\n");
       }
     }
+    free(part);
+    free(backup);
   }
 
   return (0);

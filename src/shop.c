@@ -244,12 +244,12 @@ int evaluate_expression(struct obj_data *obj, char *expr)
   ops.len = vals.len = 0;
   ptr = expr;
   while (*ptr) {
-    if (isspace(*ptr))
+    if (isspace((unsigned char)*ptr))
       ptr++;
     else {
       if ((temp = find_oper_num(*ptr)) == NOTHING) {
 	end = ptr;
-	while (*ptr && !isspace(*ptr) && find_oper_num(*ptr) == NOTHING)
+	while (*ptr && !isspace((unsigned char)*ptr) && find_oper_num(*ptr) == NOTHING)
 	  ptr++;
 	strncpy(name, end, ptr - end);	/* strncpy: OK (name/end:MAX_STRING_LENGTH) */
 	name[ptr - end] = '\0';
@@ -615,7 +615,8 @@ void shopping_buy(char *arg, struct char_data *ch, struct char_data *keeper, int
 
   strlcpy(tempstr, times_message(ch->carrying, 0, bought), sizeof(tempstr));
 
-  snprintf(tempbuf, sizeof(tempbuf), "$n buys %s.", tempstr);
+  snprintf(tempbuf, sizeof(tempbuf), "$n buys %.*s.",
+           (int)(sizeof(tempbuf) - sizeof("$n buys .")), tempstr);
   act(tempbuf, FALSE, ch, obj, 0, TO_ROOM);
 
   snprintf(tempbuf, sizeof(tempbuf), shop_index[shop_nr].message_buy, GET_NAME(ch), goldamt);
@@ -797,7 +798,8 @@ void shopping_sell(char *arg, struct char_data *ch, struct char_data *keeper, in
   GET_GOLD(ch) += goldamt;
 
   strlcpy(tempstr, times_message(0, name, sold), sizeof(tempstr));
-  snprintf(tempbuf, sizeof(tempbuf), "$n sells %s.", tempstr);
+  snprintf(tempbuf, sizeof(tempbuf), "$n sells %.*s.",
+           (int)(sizeof(tempbuf) - sizeof("$n sells .")), tempstr);
   act(tempbuf, FALSE, ch, obj, 0, TO_ROOM);
 
   snprintf(tempbuf, sizeof(tempbuf), shop_index[shop_nr].message_sell, GET_NAME(ch), goldamt);
@@ -1109,14 +1111,14 @@ int read_type_list(FILE *shop_f, struct shop_buy_data *list,
     ptr = buf;
     if (num == NOTHING) {
       sscanf(buf, "%d", &num);
-      while (!isdigit(*ptr))
+      while (!isdigit((unsigned char)*ptr))
 	ptr++;
-      while (isdigit(*ptr))
+      while (isdigit((unsigned char)*ptr))
 	ptr++;
     }
-    while (isspace(*ptr))
+    while (isspace((unsigned char)*ptr))
       ptr++;
-    while (isspace(*(END_OF(ptr) - 1)))
+    while (isspace((unsigned char)*(END_OF(ptr) - 1)))
       *(END_OF(ptr) - 1) = '\0';
     error += add_to_list(list, LIST_TRADE, &len, &num);
     if (*ptr)

@@ -152,7 +152,7 @@ room_rnum find_target_room(struct char_data *ch, char *rawroomstr)
     return (NOWHERE);
   }
 
-  if (isdigit(*roomstr) && !strchr(roomstr, '.')) {
+  if (isdigit((unsigned char)*roomstr) && !strchr(roomstr, '.')) {
     if ((location = real_room((room_vnum)atoi(roomstr))) == NOWHERE) {
       send_to_char(ch, "No room exists with that number.\r\n");
       return (NOWHERE);
@@ -1008,7 +1008,7 @@ ACMD(do_load)
 
   two_arguments(argument, buf, buf2);
 
-  if (!*buf || !*buf2 || !isdigit(*buf2)) {
+  if (!*buf || !*buf2 || !isdigit((unsigned char)*buf2)) {
     send_to_char(ch, "Usage: load { obj | mob } <number>\r\n");
     return;
   }
@@ -1060,7 +1060,7 @@ ACMD(do_vstat)
 
   two_arguments(argument, buf, buf2);
 
-  if (!*buf || !*buf2 || !isdigit(*buf2)) {
+  if (!*buf || !*buf2 || !isdigit((unsigned char)*buf2)) {
     send_to_char(ch, "Usage: vstat { obj | mob } <number>\r\n");
     return;
   }
@@ -1631,7 +1631,6 @@ ACMD(do_wiznet)
 	buf2[MAX_INPUT_LENGTH + MAX_NAME_LENGTH + 32];
   struct descriptor_data *d;
   char emote = FALSE;
-  char any = FALSE;
   int level = LVL_IMMORT;
 
   skip_spaces(&argument);
@@ -1659,7 +1658,7 @@ ACMD(do_wiznet)
 
   case '@':
     send_to_char(ch, "God channel status:\r\n");
-    for (any = 0, d = descriptor_list; d; d = d->next) {
+    for (d = descriptor_list; d; d = d->next) {
       if (STATE(d) != CON_PLAYING || GET_LEVEL(d->character) < LVL_IMMORT)
         continue;
       if (!CAN_SEE(ch, d->character))

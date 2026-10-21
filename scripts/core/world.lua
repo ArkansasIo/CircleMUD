@@ -20,6 +20,7 @@ function World:generate_instance(id, config)
   instance.id = id
   self.instances[id] = instance
   self:emit("instance_generated", { instance_id = id, kind = instance.kind,
+    layout = instance.layout, generator_version = instance.generator_version,
     room_count = #instance.rooms, floor_count = #instance.floors, seed = instance.seed })
   return instance
 end

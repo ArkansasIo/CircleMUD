@@ -6,7 +6,8 @@ WorldEvents.event_types = {
 }
 
 function WorldEvents.difficulty_weight(tier)
-  return 1.0 + ((math.max(1, math.min(9, tier)) - 1) * 0.25)
+  tier = math.max(1, math.min(9, tonumber(tier) or 1))
+  return 1.0 + ((tier - 1) * 0.25)
 end
 
 function WorldEvents.spawn_profile(tier)

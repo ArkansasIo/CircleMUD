@@ -291,7 +291,7 @@ int main(int argc, char **argv)
   }
 
   if (pos < argc) {
-    if (!isdigit(*argv[pos])) {
+    if (!isdigit((unsigned char)*argv[pos])) {
       printf("Usage: %s [-c] [-m] [-q] [-r] [-s] [-d pathname] [port #]\n", argv[0]);
       exit(1);
     } else if ((port = atoi(argv[pos])) <= 1024) {
@@ -1312,7 +1312,7 @@ int new_descriptor(socket_t s)
     sockets_connected++;
 
   if (sockets_connected >= max_players) {
-    write_to_descriptor(desc, "Sorry, CircleMUD is full right now... please try again later!\r\n");
+    write_to_descriptor(desc, "Sorry, AetherWorld is full right now... please try again later!\r\n");
     CLOSE_SOCKET(desc);
     return (0);
   }
@@ -1774,7 +1774,7 @@ int process_input(struct descriptor_data *t)
 	  } else
 	    space_left++;
 	}
-      } else if (isascii(*ptr) && isprint(*ptr)) {
+      } else if (isascii((unsigned char)*ptr) && isprint((unsigned char)*ptr)) {
 	if ((*(write_point++) = *ptr) == '$') {		/* copy one character */
 	  *(write_point++) = '$';	/* if it's a $, double it */
 	  space_left -= 2;
@@ -2327,7 +2327,7 @@ void perform_act(const char *orig, struct char_data *ch, struct obj_data *obj,
 	break;
       /* uppercase previous word */
       case 'u':
-        for (j=buf; j > lbuf && !isspace((int) *(j-1)); j--);
+        for (j=buf; j > lbuf && !isspace((unsigned char) *(j-1)); j--);
         if (j != buf)
           *j = UPPER(*j);
         i = "";
@@ -2348,7 +2348,7 @@ void perform_act(const char *orig, struct char_data *ch, struct obj_data *obj,
       }
       while ((*buf = *(i++)))
         {
-        if (uppercasenext && !isspace((int) *buf))
+        if (uppercasenext && !isspace((unsigned char) *buf))
           {
           *buf = UPPER(*buf);
           uppercasenext = FALSE;
@@ -2358,7 +2358,7 @@ void perform_act(const char *orig, struct char_data *ch, struct obj_data *obj,
       orig++;
     } else if (!(*(buf++) = *(orig++))) {
       break;
-    } else if (uppercasenext && !isspace((int) *(buf-1))) {
+    } else if (uppercasenext && !isspace((unsigned char) *(buf-1))) {
       *(buf-1) = UPPER(*(buf-1));
       uppercasenext = FALSE;
     }

@@ -668,11 +668,28 @@ int count_hash_records(FILE *fl)
 
 
 
+static void build_db_path(char *buffer, size_t buffer_size,
+                          const char *prefix, const char *name)
+{
+  size_t prefix_length = strlen(prefix);
+  size_t name_length = strlen(name);
+
+  if (prefix_length >= buffer_size || name_length >= buffer_size - prefix_length) {
+    log("SYSERR: Database path is too long: %s%s", prefix, name);
+    exit(1);
+  }
+
+  memcpy(buffer, prefix, prefix_length);
+  memcpy(buffer + prefix_length, name, name_length + 1);
+}
+
+
 void index_boot(int mode)
 {
   const char *index_filename, *prefix = NULL;	/* NULL or egcs 1.1 complains */
   FILE *db_index, *db_file;
-  int rec_count = 0, size[2];
+  int rec_count = 0;
+  size_t size[2];
   char buf2[PATH_MAX], buf1[MAX_STRING_LENGTH];
 
   switch (mode) {
@@ -704,7 +721,7 @@ void index_boot(int mode)
   else
     index_filename = INDEX_FILE;
 
-  snprintf(buf2, sizeof(buf2), "%s%s", prefix, index_filename);
+  build_db_path(buf2, sizeof(buf2), prefix, index_filename);
   if (!(db_index = fopen(buf2, "r"))) {
     log("SYSERR: opening index file '%s': %s", buf2, strerror(errno));
     exit(1);
@@ -713,7 +730,7 @@ void index_boot(int mode)
   /* first, count the number of records in the file so we can malloc */
   fscanf(db_index, "%s\n", buf1);
   while (*buf1 != '$') {
-    snprintf(buf2, sizeof(buf2), "%s%s", prefix, buf1);
+    build_db_path(buf2, sizeof(buf2), prefix, buf1);
     if (!(db_file = fopen(buf2, "r"))) {
       log("SYSERR: File '%s' listed in '%s/%s': %s", buf2, prefix,
 	  index_filename, strerror(errno));
@@ -748,38 +765,40 @@ void index_boot(int mode)
   case DB_BOOT_WLD:
     CREATE(world, struct room_data, rec_count);
     size[0] = sizeof(struct room_data) * rec_count;
-    log("   %d rooms, %d bytes.", rec_count, size[0]);
+    log("   %d rooms, %lu bytes.", rec_count, (unsigned long)size[0]);
     break;
   case DB_BOOT_MOB:
     CREATE(mob_proto, struct char_data, rec_count);
     CREATE(mob_index, struct index_data, rec_count);
     size[0] = sizeof(struct index_data) * rec_count;
     size[1] = sizeof(struct char_data) * rec_count;
-    log("   %d mobs, %d bytes in index, %d bytes in prototypes.", rec_count, size[0], size[1]);
+    log("   %d mobs, %lu bytes in index, %lu bytes in prototypes.", rec_count,
+        (unsigned long)size[0], (unsigned long)size[1]);
     break;
   case DB_BOOT_OBJ:
     CREATE(obj_proto, struct obj_data, rec_count);
     CREATE(obj_index, struct index_data, rec_count);
     size[0] = sizeof(struct index_data) * rec_count;
     size[1] = sizeof(struct obj_data) * rec_count;
-    log("   %d objs, %d bytes in index, %d bytes in prototypes.", rec_count, size[0], size[1]);
+    log("   %d objs, %lu bytes in index, %lu bytes in prototypes.", rec_count,
+        (unsigned long)size[0], (unsigned long)size[1]);
     break;
   case DB_BOOT_ZON:
     CREATE(zone_table, struct zone_data, rec_count);
     size[0] = sizeof(struct zone_data) * rec_count;
-    log("   %d zones, %d bytes.", rec_count, size[0]);
+    log("   %d zones, %lu bytes.", rec_count, (unsigned long)size[0]);
     break;
   case DB_BOOT_HLP:
     CREATE(help_table, struct help_index_element, rec_count);
     size[0] = sizeof(struct help_index_element) * rec_count;
-    log("   %d entries, %d bytes.", rec_count, size[0]);
+    log("   %d entries, %lu bytes.", rec_count, (unsigned long)size[0]);
     break;
   }
 
   rewind(db_index);
   fscanf(db_index, "%s\n", buf1);
   while (*buf1 != '$') {
-    snprintf(buf2, sizeof(buf2), "%s%s", prefix, buf1);
+    build_db_path(buf2, sizeof(buf2), prefix, buf1);
     if (!(db_file = fopen(buf2, "r"))) {
       log("SYSERR: %s: %s", buf2, strerror(errno));
       exit(1);
@@ -881,12 +900,12 @@ bitvector_t asciiflag_conv(char *flag)
   char *p;
 
   for (p = flag; *p; p++) {
-    if (islower(*p))
+    if (islower((unsigned char)*p))
       flags |= 1 << (*p - 'a');
-    else if (isupper(*p))
+    else if (isupper((unsigned char)*p))
       flags |= 1 << (26 + (*p - 'A'));
 
-    if (!isdigit(*p))
+    if (!isdigit((unsigned char)*p))
       is_num = FALSE;
   }
 
@@ -1285,7 +1304,7 @@ void parse_espec(char *buf, int i, int nr)
 
   if ((ptr = strchr(buf, ':')) != NULL) {
     *(ptr++) = '\0';
-    while (isspace(*ptr))
+    while (isspace((unsigned char)*ptr))
       ptr++;
   }
   interpret_espec(buf, ptr, i, nr);
@@ -2350,9 +2369,10 @@ void char_to_store(struct char_data *ch, struct char_file_u *st)
 
   if (ch->player.description) {
     if (strlen(ch->player.description) >= sizeof(st->description)) {
-      log("SYSERR: char_to_store: %s's description length: %d, max: %d! "
-         "Truncated.", GET_PC_NAME(ch), strlen(ch->player.description),
-         sizeof(st->description));
+      log("SYSERR: char_to_store: %s's description length: %lu, max: %lu! "
+          "Truncated.", GET_PC_NAME(ch),
+          (unsigned long)strlen(ch->player.description),
+          (unsigned long)sizeof(st->description));
       ch->player.description[sizeof(st->description) - 3] = '\0';
       strcat(ch->player.description, "\r\n");	/* strcat: OK (previous line makes room) */
     }
@@ -3017,8 +3037,9 @@ int check_bitvector_names(bitvector_t bits, size_t namecount, const char *whatam
     return (FALSE);
 
   for (flagnum = namecount; flagnum < sizeof(bitvector_t) * 8; flagnum++)
-    if ((1 << flagnum) & bits) {
-      log("SYSERR: %s has unknown %s flag, bit %d (0 through %d known).", whatami, whatbits, flagnum, namecount - 1);
+    if (((bitvector_t)1 << flagnum) & bits) {
+      log("SYSERR: %s has unknown %s flag, bit %u (0 through %lu known).",
+          whatami, whatbits, flagnum, (unsigned long)(namecount - 1));
       error = TRUE;
     }
 

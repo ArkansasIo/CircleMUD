@@ -590,7 +590,7 @@ void command_interpreter(struct char_data *ch, char *argument)
    * requested by many people so "'hi" or ";godnet test" is possible.
    * Patch sent by Eric Green and Stefan Wasilewski.
    */
-  if (!isalpha(*argument)) {
+  if (!isalpha((unsigned char)*argument)) {
     arg[0] = argument[0];
     arg[1] = '\0';
     line = argument + 1;
@@ -874,7 +874,7 @@ int search_block(char *arg, const char **list, int exact)
 int is_number(const char *str)
 {
   while (*str)
-    if (!isdigit(*(str++)))
+    if (!isdigit((unsigned char)*(str++)))
       return (0);
 
   return (1);
@@ -885,7 +885,7 @@ int is_number(const char *str)
  */
 void skip_spaces(char **string)
 {
-  for (; **string && isspace(**string); (*string)++);
+  for (; **string && isspace((unsigned char)**string); (*string)++);
 }
 
 
@@ -953,7 +953,7 @@ char *one_argument(char *argument, char *first_arg)
     skip_spaces(&argument);
 
     first_arg = begin;
-    while (*argument && !isspace(*argument)) {
+    while (*argument && !isspace((unsigned char)*argument)) {
       *(first_arg++) = LOWER(*argument);
       argument++;
     }
@@ -986,7 +986,7 @@ char *one_word(char *argument, char *first_arg)
       }
       argument++;
     } else {
-      while (*argument && !isspace(*argument)) {
+      while (*argument && !isspace((unsigned char)*argument)) {
         *(first_arg++) = LOWER(*argument);
         argument++;
       }
@@ -1004,7 +1004,7 @@ char *any_one_arg(char *argument, char *first_arg)
 {
   skip_spaces(&argument);
 
-  while (*argument && !isspace(*argument)) {
+  while (*argument && !isspace((unsigned char)*argument)) {
     *(first_arg++) = LOWER(*argument);
     argument++;
   }
@@ -1132,7 +1132,7 @@ int _parse_name(char *arg, char *name)
 
   skip_spaces(&arg);
   for (i = 0; (*name = *arg); arg++, i++, name++)
-    if (!isalpha(*arg))
+    if (!isalpha((unsigned char)*arg))
       return (1);
 
   if (!i)

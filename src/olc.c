@@ -99,7 +99,7 @@ ACMD(do_olc)
     }
     break;
   case OLC_ROOM:
-    if (isdigit(*argument)) {
+    if (isdigit((unsigned char)*argument)) {
       /* room specified.  take the numeric argument off */
       argument = one_argument(argument, arg);
       if (!is_number(arg)) {
@@ -171,7 +171,7 @@ ACMD(do_olc)
 /* OLC interpreter command; called by do_olc */
 void olc_interpreter(void *targ, int mode, char *arg)
 {
-  int error = 0, command;
+  int command;
   char command_string[MAX_INPUT_LENGTH];
   struct char_data *olc_mob = NULL;
   struct room_data *olc_room = NULL;
@@ -208,7 +208,6 @@ void olc_interpreter(void *targ, int mode, char *arg)
     case OLC_OBJ:
       break;
     default:
-      error = 1;
       break;
     }
     break;
@@ -224,7 +223,6 @@ void olc_interpreter(void *targ, int mode, char *arg)
       olc_string(&olc_obj->short_description, MAX_OBJ_NAME, arg);
       break;
     default:
-      error = 1;
       break;
     }
     break;
@@ -241,7 +239,6 @@ void olc_interpreter(void *targ, int mode, char *arg)
       olc_string(&olc_obj->description, MAX_OBJ_DESC, arg);
       break;
     default:
-      error = 1;
       break;
     }
     break;
@@ -255,7 +252,6 @@ void olc_interpreter(void *targ, int mode, char *arg)
     case OLC_OBJ:
       break;
     default:
-      error = 1;
       break;
     }
 
