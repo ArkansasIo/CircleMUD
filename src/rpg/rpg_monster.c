@@ -1,6 +1,7 @@
 #include "rpg_monster.h"
 #include "rpg_encounter.h"
 #include "rpg_world_difficulty.h"
+#include "rpg_level.h"
 
 static rpg_mob_tier tier_from_catalog(int local) {
   switch (local % 5) {
