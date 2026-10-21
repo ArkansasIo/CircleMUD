@@ -23,6 +23,15 @@ static rpg_monster *find_monster(int monster_id) {
   return NULL;
 }
 
+static rpg_monster *find_source_monster(int source_key) {
+  int i;
+  if (source_key <= 0) return NULL;
+  for (i = 0; i < RPG_LIVE_MAX_MONSTERS; ++i)
+    if (state.monsters[i].source_key == source_key)
+      return &state.monsters[i];
+  return NULL;
+}
+
 static void reset_item_state(rpg_live_player *player) {
   int i;
   for (i = 0; i < RPG_LIVE_MAX_INVENTORY; ++i)
@@ -36,6 +45,7 @@ void rpg_live_init(void) {
   memset(&state, 0, sizeof(state));
   state.initialized = 1;
   state.next_monster_id = 1;
+  state.monster_sync_epoch = 0;
   for (i = 0; i < RPG_LIVE_MAX_MONSTERS; ++i)
     state.monsters[i].catalog_index = -1;
   rpg_rng_seed(&rng, 0xC1A1E57u);
@@ -154,9 +164,72 @@ int rpg_live_spawn_monster(int catalog_index, int zone_id, int difficulty) {
     if (!rpg_monster_init(&state.monsters[i], state.next_monster_id++, catalog_index,
                           zone_id, difficulty))
       return 0;
+    state.monsters[i].source_key = 0;
+    state.monsters[i].bridge_epoch = 0;
     return state.monsters[i].id;
   }
   return 0;
+}
+
+void rpg_live_begin_monster_sync(void) {
+  if (!state.initialized) return;
+  ++state.monster_sync_epoch;
+  if (state.monster_sync_epoch == 0)
+    state.monster_sync_epoch = 1;
+}
+
+int rpg_live_sync_monster_source(int source_key, int catalog_index, int zone_id,
+                                 int difficulty, int level, double health,
+                                 double max_health, double damage, double armor) {
+  rpg_monster *monster;
+  int i;
+
+  if (!state.initialized || source_key <= 0 ||
+      !rpg_catalog_valid_index(catalog_index) ||
+      catalog_index < 750 || catalog_index >= 850 || level <= 0 ||
+      health < 0.0 || max_health < 0.0 || damage < 0.0)
+    return 0;
+
+  monster = find_source_monster(source_key);
+  if (!monster) {
+    for (i = 0; i < RPG_LIVE_MAX_MONSTERS; ++i) {
+      if (state.monsters[i].catalog_index >= 0 && state.monsters[i].alive)
+        continue;
+      monster = &state.monsters[i];
+      if (!rpg_monster_init(monster, state.next_monster_id++, catalog_index,
+                            zone_id, difficulty))
+        return 0;
+      break;
+    }
+  }
+
+  if (!monster) return 0;
+
+  monster->source_key = source_key;
+  monster->bridge_epoch = state.monster_sync_epoch;
+  monster->catalog_index = catalog_index;
+  monster->zone_id = zone_id;
+  monster->level = level;
+  monster->world_difficulty = difficulty;
+  monster->health = health;
+  monster->max_health = max_health > 0.0 ? max_health : health;
+  monster->damage = damage;
+  monster->armor = armor;
+  monster->alive = health > 0.0 ? 1 : 0;
+  return monster->id;
+}
+
+void rpg_live_end_monster_sync(void) {
+  int i;
+  if (!state.initialized) return;
+  for (i = 0; i < RPG_LIVE_MAX_MONSTERS; ++i) {
+    rpg_monster *monster = &state.monsters[i];
+    if (monster->source_key <= 0) continue;
+    if (monster->bridge_epoch == state.monster_sync_epoch) continue;
+    /* The authoritative CircleMUD instance no longer exists. */
+    memset(monster, 0, sizeof(*monster));
+    monster->catalog_index = -1;
+  }
 }
 
 int rpg_live_attack(int player_id, int monster_id, rpg_damage_type type) {
