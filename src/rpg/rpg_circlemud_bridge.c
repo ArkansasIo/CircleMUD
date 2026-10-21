@@ -24,8 +24,45 @@ static int circlemud_player_present(int id) {
   return 0;
 }
 
+static void circlemud_inventory_snapshot(const struct char_data *ch,
+                                         int *inventory_count,
+                                         int *inventory_weight,
+                                         int *equipment_count) {
+  struct obj_data *obj;
+  int count = 0;
+  int weight = 0;
+  int equipped = 0;
+  int slot;
+
+  if (!ch) {
+    if (inventory_count) *inventory_count = 0;
+    if (inventory_weight) *inventory_weight = 0;
+    if (equipment_count) *equipment_count = 0;
+    return;
+  }
+
+  for (obj = ch->carrying; obj; obj = obj->next_content) {
+    ++count;
+    if (GET_OBJ_WEIGHT(obj) > 0)
+      weight += GET_OBJ_WEIGHT(obj);
+  }
+
+  for (slot = 0; slot < NUM_WEARS; ++slot)
+    if (GET_EQ(ch, slot))
+      ++equipped;
+
+  if (inventory_count) *inventory_count = count;
+  if (inventory_weight) *inventory_weight = weight;
+  if (equipment_count) *equipment_count = equipped;
+}
+
 int rpg_circlemud_sync_character(struct char_data *ch) {
   int id;
+  int inventory_count;
+  int inventory_weight;
+  int equipment_count;
+  int room_id = -1;
+  int zone_id = -1;
   rpg_character *rpg;
 
   if (!ch || IS_NPC(ch))
@@ -66,6 +103,23 @@ int rpg_circlemud_sync_character(struct char_data *ch) {
   rpg->stats.max_stamina = (double)ch->points.max_move;
   rpg->stats.stamina = (double)ch->points.move;
 
+  if (IN_ROOM(ch) != NOWHERE && IN_ROOM(ch) >= 0 && IN_ROOM(ch) <= top_of_world) {
+    room_id = (int)IN_ROOM(ch);
+    zone_id = world[IN_ROOM(ch)].zone;
+  }
+
+  circlemud_inventory_snapshot(ch, &inventory_count, &inventory_weight,
+                               &equipment_count);
+
+  /*
+   * Keep ownership on the CircleMUD side for now. The RPG runtime receives
+   * a deterministic snapshot of location and object counts/weight; it does
+   * not retain obj_data pointers or alter legacy save-file state.
+   */
+  rpg_live_set_player_world_state(id, room_id, zone_id,
+                                  inventory_count, equipment_count,
+                                  inventory_weight);
+
   return 1;
 }
 
@@ -80,6 +134,11 @@ int rpg_circlemud_unsync_character(struct char_data *ch) {
     return 0;
 
   return rpg_live_unregister_player(id);
+}
+
+void rpg_circlemud_on_character_extracted(struct char_data *ch) {
+  /* Extraction can be reached from combat, rent, death, and admin paths. */
+  (void)rpg_circlemud_unsync_character(ch);
 }
 
 void rpg_circlemud_sync_players(void) {
