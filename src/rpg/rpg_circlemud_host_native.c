@@ -57,11 +57,15 @@ static int native_apply_damage(int player_id, int monster_id, int source_key,
                                int amount) {
   struct char_data *attacker = find_player(player_id);
   struct char_data *victim = find_event_monster(monster_id, source_key);
+  int result;
 
   if (!attacker || !victim || !IS_NPC(victim) || amount <= 0)
     return 0;
 
-  return damage(attacker, victim, amount, TYPE_HIT) >= 0;
+  result = damage(attacker, victim, amount, TYPE_HIT);
+  /* CircleMUD returns -1 when this hit kills the victim. That is still a
+   * successful host mutation; death/extraction is part of the native path. */
+  return result >= 0 || result == -1;
 }
 
 static int native_apply_death(int player_id, int monster_id, int source_key) {
