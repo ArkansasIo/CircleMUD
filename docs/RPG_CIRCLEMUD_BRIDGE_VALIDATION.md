@@ -32,6 +32,11 @@ The adapter must never retain a pointer to `struct char_data` or `struct obj_dat
 - Re-seeing the same NPC source key updates the existing RPG monster rather than allocating a duplicate.
 - RPG monster health, damage, armor, level, catalog index, and zone are copied as scalar values from CircleMUD.
 - The generated monster catalog remains a deterministic fallback for prototype-to-catalog translation.
+- Combat events are queued as RPG-owned value objects; the queue never mutates legacy CircleMUD state.
+- Every combat event has a monotonically assigned non-zero sequence and must pass the explicit authorization gate before a future host adapter can apply it.
+- Damage, death, XP, and loot events reject invalid player/monster identifiers and invalid numeric payloads.
+- Loot events must reference a valid RPG catalog entry.
+- Clearing the event queue does not mutate player, NPC, object, or save-file state.
 - The legacy player-file structures remain unchanged. In particular, do not alter the layout of `char_file_u` or `player_special_data_saved` without an explicit compatibility migration.
 - Synchronization copies the current legacy sheet; RPG simulation does not write combat results back to CircleMUD state until a controlled gameplay adapter and persistence regression tests are added.
 
@@ -44,7 +49,7 @@ sh tests/run_rpg_tests.sh
 sh tests/run_rpg_catalog_runtime_test.sh
 ```
 
-The RPG suite now includes `tests/rpg_live_monster_source_test.c`, covering source-key reuse, scalar synchronization, and stale-instance cleanup.
+The RPG suite includes the live player, item, monster-source, and combat-event bridge tests.
 
 Run the legacy server build in a configured POSIX environment:
 
@@ -65,8 +70,35 @@ CircleMUD's current `char_data` model does not provide a safe persistent per-ins
 
 The derived key is deliberately an adapter boundary, not a persistence identity. A future host integration can replace it with an explicit stable NPC instance ID without changing the RPG monster API.
 
+## Combat event policy
+
+`rpg_circlemud_combat_bridge` is deliberately one-way and transactional at this stage. RPG combat can produce value events, but those events are not automatically applied to `char_data`, `obj_data`, player files, or CircleMUD combat state.
+
+The intended future flow is:
+
+```text
+RPG Combat
+    |
+    v
+RPG Event Queue
+    |
+    v
+Host Authorization
+    |
+    +---- rejected --> discard/log
+    |
+    +---- accepted --> CircleMUD mutation adapter
+                              |
+                              +--> damage/death
+                              +--> XP
+                              +--> loot
+                              +--> persistence
+```
+
+This prevents a partially integrated RPG calculation from corrupting the legacy simulation. A later mutation adapter must validate that the player and NPC still exist, that the source identity is current, and that the event sequence has not already been consumed.
+
 ## Integration boundary still to implement
 
 The explicit extraction hook is available through `rpg_circlemud_on_character_extracted()`. It should be called from the server's authoritative extraction path when the host build is wired for the RPG bridge; the heartbeat sweep remains a defensive cleanup fallback.
 
-The next stage is controlled RPG combat/event propagation back into CircleMUD, including damage authorization, death handling, loot transfer, XP transfer, and persistence safeguards. Do not write RPG combat results directly into legacy character state until those contracts have dedicated multiplayer and save-file regression tests.
+The next stage is an explicit **combat event consumer** with replay protection, target validation, death-state arbitration, loot materialization, XP accounting, and save scheduling. Do not write RPG combat results directly into legacy character state until those contracts have dedicated multiplayer and save-file regression tests.
