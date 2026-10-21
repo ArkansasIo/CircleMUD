@@ -57,6 +57,8 @@ int rpg_live_register_player(int player_id, int level) {
     memset(&state.players[i], 0, sizeof(state.players[i]));
     state.players[i].active = 1;
     state.players[i].player_id = player_id;
+    state.players[i].room_id = -1;
+    state.players[i].zone_id = -1;
     rpg_character_init(&state.players[i].character, player_id);
     if (!rpg_character_set_level(&state.players[i].character, level)) {
       state.players[i].active = 0;
@@ -77,6 +79,26 @@ int rpg_live_unregister_player(int player_id) {
 rpg_character *rpg_live_get_character(int player_id) {
   rpg_live_player *player = find_player(player_id);
   return player ? &player->character : NULL;
+}
+
+rpg_live_player *rpg_live_get_player(int player_id) {
+  return find_player(player_id);
+}
+
+int rpg_live_set_player_world_state(int player_id, int room_id, int zone_id,
+                                    int inventory_count, int equipment_count,
+                                    int inventory_weight) {
+  rpg_live_player *player = find_player(player_id);
+  if (!player || room_id < -1 || zone_id < -1 ||
+      inventory_count < 0 || equipment_count < 0 || inventory_weight < 0)
+    return 0;
+
+  player->room_id = room_id;
+  player->zone_id = zone_id;
+  player->inventory_count = inventory_count;
+  player->equipment_count = equipment_count;
+  player->inventory_weight = inventory_weight;
+  return 1;
 }
 
 int rpg_live_spawn_monster(int catalog_index, int zone_id, int difficulty) {
