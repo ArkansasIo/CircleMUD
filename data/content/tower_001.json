@@ -1,0 +1,45 @@
+{
+  "id": "tower-001",
+  "name": "Tower of the Broken Circle",
+  "type": "tower",
+  "max_floors": 100,
+  "checkpoint_interval": 10,
+  "floor_bands": [
+    {"min":1,"max":10,"tier":"Initiate"},
+    {"min":11,"max":20,"tier":"Vanguard"},
+    {"min":21,"max":30,"tier":"Veteran"},
+    {"min":31,"max":40,"tier":"Champion"},
+    {"min":41,"max":50,"tier":"Heroic"},
+    {"min":51,"max":60,"tier":"Mythic"},
+    {"min":61,"max":70,"tier":"Ascendant"},
+    {"min":71,"max":80,"tier":"Paragon"},
+    {"min":81,"max":90,"tier":"Apex"},
+    {"min":91,"max":99,"tier":"Transcendent"},
+    {"min":100,"max":100,"tier":"Tower Crown"}
+  ],
+  "floors": [
+    {"floor":1,"type":"combat","encounter":"tower_initiate_01"},
+    {"floor":2,"type":"combat","encounter":"tower_initiate_02"},
+    {"floor":3,"type":"hazard","encounter":"tower_initiate_03"},
+    {"floor":4,"type":"combat","encounter":"tower_initiate_04"},
+    {"floor":5,"type":"elite","encounter":"tower_initiate_05"},
+    {"floor":6,"type":"combat","encounter":"tower_initiate_06"},
+    {"floor":7,"type":"challenge","encounter":"tower_initiate_07"},
+    {"floor":8,"type":"combat","encounter":"tower_initiate_08"},
+    {"floor":9,"type":"elite","encounter":"tower_initiate_09"},
+    {"floor":10,"type":"boss","encounter":"tower_guardian_10","checkpoint":true},
+    {"floor":20,"type":"boss","encounter":"tower_guardian_20","checkpoint":true},
+    {"floor":30,"type":"boss","encounter":"tower_guardian_30","checkpoint":true},
+    {"floor":40,"type":"boss","encounter":"tower_guardian_40","checkpoint":true},
+    {"floor":50,"type":"boss","encounter":"tower_guardian_50","checkpoint":true},
+    {"floor":60,"type":"boss","encounter":"tower_guardian_60","checkpoint":true},
+    {"floor":70,"type":"boss","encounter":"tower_guardian_70","checkpoint":true},
+    {"floor":80,"type":"boss","encounter":"tower_guardian_80","checkpoint":true},
+    {"floor":90,"type":"boss","encounter":"tower_guardian_90","checkpoint":true},
+    {"floor":100,"type":"final_boss","encounter":"tower_crown_guardian","checkpoint":true}
+  ],
+  "generation": {
+    "unspecified_floor_pattern": "combat|elite|hazard|challenge|reward",
+    "modifier_pool": ["reinforced_enemies","reduced_healing","arcane_surge","burning_ground","frozen_ground","vampiric_enemies","swarming_enemies","time_pressure","no_respawn","elite_reinforcements"]
+  }
+}
