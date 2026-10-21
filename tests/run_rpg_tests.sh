@@ -86,12 +86,23 @@ rm -f /tmp/circlemud-rpg-encounter-budget-tests
 $CC $CFLAGS \
   tests/rpg_runtime_tick_test.c \
   src/rpg/rpg_runtime_tick.c \
+  src/rpg/rpg_live.c \
   src/rpg/rpg_system.c \
   src/rpg/rpg_world.c \
-  src/rpg/rpg_encounter.c \
+  src/rpg/rpg_character.c \
   src/rpg/rpg_level.c \
-  src/rpg/rpg_world_difficulty.c \
+  src/rpg/rpg_equipment.c \
+  src/rpg/rpg_item.c \
+  src/rpg/rpg_catalog.c \
+  src/rpg/rpg_character_value.c \
   src/rpg/rpg_value.c \
+  src/rpg/rpg_monster.c \
+  src/rpg/rpg_encounter.c \
+  src/rpg/rpg_world_difficulty.c \
+  src/rpg/rpg_rng.c \
+  src/rpg/rpg_combat.c \
+  src/rpg/rpg_loot_drop.c \
+  src/rpg/rpg_loot.c \
   -lm -o /tmp/circlemud-rpg-runtime-tick-tests
 /tmp/circlemud-rpg-runtime-tick-tests
 rm -f /tmp/circlemud-rpg-runtime-tick-tests
@@ -100,12 +111,23 @@ $CC $CFLAGS \
   tests/rpg_heartbeat_hook_test.c \
   src/rpg/rpg_heartbeat_hook.c \
   src/rpg/rpg_runtime_tick.c \
+  src/rpg/rpg_live.c \
   src/rpg/rpg_system.c \
   src/rpg/rpg_world.c \
-  src/rpg/rpg_encounter.c \
+  src/rpg/rpg_character.c \
   src/rpg/rpg_level.c \
-  src/rpg/rpg_world_difficulty.c \
+  src/rpg/rpg_equipment.c \
+  src/rpg/rpg_item.c \
+  src/rpg/rpg_catalog.c \
+  src/rpg/rpg_character_value.c \
   src/rpg/rpg_value.c \
+  src/rpg/rpg_monster.c \
+  src/rpg/rpg_encounter.c \
+  src/rpg/rpg_world_difficulty.c \
+  src/rpg/rpg_rng.c \
+  src/rpg/rpg_combat.c \
+  src/rpg/rpg_loot_drop.c \
+  src/rpg/rpg_loot.c \
   -lm -o /tmp/circlemud-rpg-heartbeat-hook-tests
 /tmp/circlemud-rpg-heartbeat-hook-tests
 rm -f /tmp/circlemud-rpg-heartbeat-hook-tests
