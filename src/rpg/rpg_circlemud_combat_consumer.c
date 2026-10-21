@@ -1,23 +1,16 @@
 #include "rpg_circlemud_combat_consumer.h"
 
+#include "rpg_circlemud_combat_transaction.h"
 #include "rpg_live.h"
 
 /*
- * This layer deliberately stops at the RPG runtime boundary for now.
- *
- * It validates and acknowledges events without writing into CircleMUD's
- * char_data/obj_data structures. A future host adapter can replace the
- * acknowledgement with an authorized transaction after it has resolved the
- * legacy player/NPC instance and persistence policy.
+ * The consumer is intentionally a transaction gate. It does not mutate
+ * CircleMUD structures. Only events that match the current RPG snapshot are
+ * acknowledged as eligible for the eventual host-side mutation adapter.
  */
 int rpg_circlemud_combat_consume_event(const rpg_circlemud_combat_event *event) {
-  if (!rpg_circlemud_combat_event_authorized(event))
-    return 0;
-
-  if (!rpg_live_get_player(event->player_id))
-    return 0;
-
-  return 1;
+  return rpg_circlemud_combat_transaction_validate(event) ==
+         RPG_CIRCLEMUD_TX_ACCEPTED;
 }
 
 int rpg_circlemud_combat_consume_queue(void) {
